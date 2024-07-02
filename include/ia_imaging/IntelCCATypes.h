@@ -269,6 +269,7 @@ typedef struct
     ia_aiq_aperture_control aperture_control;          /*!< Aperture control parameters. */
     cca_hist_weight_grid weight_grid;   /*!< AEC weight wap used by next frame. */
     ia_aiq_ae_flicker_reduction flicker_reduction_mode; /*!< Flicker reduction mode proposed by the AEC algorithm */
+    unsigned short shdr_ldr_mode; /*Staggered HDR LDR (low dynamic range) mode. 0 - HDR mode, 1 - LDR mode */
 } cca_ae_results;
 
 /*!
@@ -345,6 +346,8 @@ typedef struct
     float32_t ev_shift;                         /*!< Optional. Exposure Value shift [-4,4]. */
     bool gbce_on;                           /*!< Optional. This flag is used to return gamma table in output params*/
     bool athena_mode;                       /*!< Optional. This flag is used to indicate whethe athena mode is enabled in ful_gtm algo*/
+    gtm_glare_detection_type glare_detect_type; /*!< Optional. Glare detection. */
+    uint32_t lux_level_sensors[2];              /*!< Optional. Sensor lux level based glare detection. */
 } cca_gbce_input_params;
 
 /*!
@@ -738,6 +741,7 @@ struct cca_init_params{
     cca_stream_ids aic_stream_ids;   /*!< Optional. the stream id for aic handle*/
     bool disableMKN;                 /*!< Mandatory, enable/disable MKN dump for debug*/
     ia_lard_input_params lardInputParams; /*!< Optional. initial lard input params*/
+    uint32_t num_exposures;          /*!< Optional.  one exposure result returned by default, two more exposure for HDR */
     cca_init_params() :
         frameUse(ia_aiq_frame_use_preview),
         conversionGainRatio(1),
@@ -747,7 +751,8 @@ struct cca_init_params{
         enableVideoStablization(false),
         aiqStorageLen(3),
         aecFrameDelay(2),
-        disableMKN(false)
+        disableMKN(false),
+        num_exposures(1)
         {
             bitmap = CCA_MODULE_AE | CCA_MODULE_AF | CCA_MODULE_AWB |
                      CCA_MODULE_PA | CCA_MODULE_SA | CCA_MODULE_GBCE |

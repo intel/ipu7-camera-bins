@@ -38,6 +38,7 @@ extern "C"{
 typedef enum
 {
     ia_pal_uuid_isp_acm_1_1 = 13026,
+    ia_pal_uuid_isp_acm_1_2 = 17531,
     ia_pal_uuid_isp_aestatistics_2_1 = 55073,
     ia_pal_uuid_isp_b2i_ds_1_0_1 = 20739,
     ia_pal_uuid_isp_b2i_ds_1_1 = 40299,
@@ -117,6 +118,7 @@ typedef enum
 
 typedef enum
 {
+    ia_pal_uuid_system_api_acm_1_2 = 36320,
     ia_pal_uuid_system_api_aestatistics_2_1 = 39342,
     ia_pal_uuid_system_api_bnlm_3_3 = 5901,
     ia_pal_uuid_system_api_bxt_blc = 12306,

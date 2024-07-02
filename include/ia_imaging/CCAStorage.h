@@ -59,6 +59,9 @@ typedef struct {
     uint16_t ir_weight_b[MAX_IR_WEIGHT_GRID_SIZE];
     ia_aiq_rgbir_t rgbir;
     ia_aiq_rgbir_model_t models[MAX_RGBIR_MODELS];
+    ia_aiq_advanced_ccm_SAP_t preferred_acm_SAP;
+    int32_t sector_index_array[NUM_OF_ACM_SEGMENTS][NUM_OF_SECTORS_PER_SEGMENT];
+    float32_t advanced_color_conversion_matrices[NUM_OF_ACM_SEGMENTS][NUM_OF_SECTORS_PER_SEGMENT][3][3];
     /*LDRA_INSPECTED 67 X */
     ia_aiq_pa_results_v1 pa_results;
     ia_aiq_awb_results awb_results;

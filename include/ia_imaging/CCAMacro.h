@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2023 Intel Corporation.
+ * Copyright (C) 2021-2024 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ const float GDC_CLIP_MAX_ANGLE = 3.5f;
 
 const uint32_t MAX_KERNEL_NUM_IN_PG = 128;
 const uint32_t MAX_PG_NUM = 5;
-const uint32_t MAX_PG_TERMINAL_NUM = 36;
+const uint32_t MAX_PG_TERMINAL_NUM = 38;
 
 const float MIN_MANUAL_GAMMA = 0.01f;
 const float MAX_MANUAL_GAMMA = 5.0f;
@@ -87,5 +87,8 @@ const uint32_t MAX_STREAM_NUM = 5;
 const uint32_t MAX_RGBIR_MODELS = 3;
 
 const uint64_t INVALID_FRAME_ID = static_cast<uint64_t>(-1);
+
+const uint32_t NUM_OF_ACM_SEGMENTS = 6U;
+const uint32_t NUM_OF_SECTORS_PER_SEGMENT = 6U;
 }//cca
 #endif //CCAMACRO_H_
