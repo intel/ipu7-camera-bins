@@ -260,6 +260,8 @@ public:
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err ConfigDvs(uint32_t DvsId, ia_dvs_configuration_v1* dvs_config, float32_t zoom_factor);
+
+    ia_err getDvsImageTransformationOutput(uint32_t DvsId, uint64_t frameId, ia_dvs_image_transformation **ImageTrans);
 #endif
     /*!
      * \brief query the CMC data (camera module characteristic).
@@ -270,6 +272,8 @@ public:
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err getCMC(cca_cmc &cmc, const cca_cpf *aiq_cpf = nullptr);
+
+    ia_err getCCTWhiteMapNode(uint32_t cur_cct, float32_t *r_g_gain, float32_t *b_g_gain);
 
     /*!
      * \brief query the MKN data (maker notes).
@@ -428,6 +432,14 @@ public:
     * \return                   Error code for status. zero on success, non-zero on failure
     */
     ia_err reinitAic(const int32_t aic_id = -1);
+
+    /*!
+     *
+     * \brief reinit aiq
+     *
+     * \return                   Error code for status. zero on success, non-zero on failure
+     */
+    ia_err reinitAiq();
 
     /*!
     *

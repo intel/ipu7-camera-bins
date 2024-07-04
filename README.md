@@ -17,8 +17,8 @@ There are 4 repositories that provide the complete setup:
 ipu7-camera-bins should be copied to build server and target
 ```
 # Runtime files
-mkdir -p /lib/firmware/intel
-cp -r ipu7-camera-bins/lib/firmware/intel/*.bin /lib/firmware/intel/
+mkdir -p /lib/firmware/intel/ipu
+cp -r ipu7-camera-bins/lib/firmware/intel/ipu/*.bin /lib/firmware/intel/ipu
 cp ipu7-camera-bins/lib/lib* /usr/lib/
 # Development files
 mkdir -p /usr/include /usr/lib/pkgconfig

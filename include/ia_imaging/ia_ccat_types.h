@@ -1,7 +1,7 @@
 /*
  * INTEL CONFIDENTIAL
  *
- * Copyright (C) 2012-2023 Intel Corporation
+ * Copyright (C) 2012-2024 Intel Corporation
  *
  * This software and the related documents are Intel copyrighted materials,
  * and your use of them is governed by the express license under which they
@@ -141,6 +141,7 @@ typedef struct
     uint64_t frame_id;                                                          /*!< Mandatory. ID for the captured frame. */
     uint64_t frame_timestamp;                                                   /*!< Mandatory. Time stamp for captured frame. */
     ia_rectangle statistics_crop_area;                                          /*!< Mandatory. RGBS and AF grid area crop with respect to full field of view of sensor output using (relative)ranges from ia_coordinate.h. */
+    float32_t stitched_stats_norm_factor;                                        /*!< Mandatory. For companded pipe usually statistivs represent more than 16bits then factor > 1 depends on highest bit represent by stat. */                                     
 #ifdef IA_CCAT_EXTERNAL_RGB_HISTOGRAMS_ENABLED
     ia_ccat_histograms rgb_histograms[IA_CCAT_STATISTICS_MAX_NUM];              /*!< Optional. RGB histograms pointer for each exposure statistics. */
 #endif

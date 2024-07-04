@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2023 Intel Corporation
+ * Copyright 2012-2024 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -440,6 +440,8 @@ typedef struct
     ia_aiq_frame_use frame_use;             /*!< Deprecated. Not used. */
     float32_t ev_shift;                     /*!< Optional. Exposure Value shift [-4,4]. */
     bool athena_mode;                       /*!< Optional. This flag is used to indicate whethe athena mode is enabled in ful_gtm algo*/
+    gtm_glare_detection_type glare_detect_type; /*!< Optional. Glare detection. */
+    uint32_t lux_level_sensors[2];              /*!< Optional. Sensor lux level based glare detection. */
 } ia_aiq_gbce_input_params;
 
 /*!
@@ -569,6 +571,19 @@ LIBEXPORT ia_err
 ia_aiq_af_bracket(ia_aiq *a_ia_aiq_ptr,
                   const ia_aiq_af_bracket_input_params *af_bracket_input_params,
                   ia_aiq_af_bracket_results **af_bracket_results);
+
+/*!
+ * \param[in]  ia_aiq               Mandatory.\n
+ *                                  AIQ instance handle.
+ * \param[out] r_g_gain b_g_gain    Mandatory.\n
+ *                                  Contains various AIQ white map data.
+ * \return                          Error code.
+ */
+LIBEXPORT ia_err
+ia_aiq_get_cct_whitemap_node(ia_aiq* a_ia_aiq_ptr,
+    uint32_t cur_cct,
+    float32_t *r_g_gain,
+    float32_t *b_g_gain);
 
 /*!
  * \param[in]  ia_aiq               Mandatory.\n

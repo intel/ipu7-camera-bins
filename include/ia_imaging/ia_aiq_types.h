@@ -281,7 +281,8 @@ typedef enum
     ia_aiq_bracket_mode_none,             /*!< No bracketing used. */
     ia_aiq_bracket_mode_ull  = (1U << 0U),  /*!< Ultra Low Light bracketing used. */
     ia_aiq_bracket_mode_hdr  = (1U << 1U),   /*!< High Dynamic Range bracketing used. */
-    ia_aiq_bracket_mode_ull_auto_switch = (1U << 2U)   /*!< 1C (0) 4C (1) auto switch indication. */
+    ia_aiq_bracket_mode_ull_auto_switch = (1U << 2U),   /*!< 1C (0) 4C (1) auto switch indication. */
+    ia_aiq_bracket_mode_shdr_ldr_switch = (1U << 3U)    /*!< shdr S and L (0) ldr long only (1) - for DOL */
 } ia_aiq_bracket_mode;
 
 /*!
@@ -715,6 +716,16 @@ typedef enum
 } ia_aiq_gbce_level;
 
 /*!
+ * \brief Glare Detection function.
+ */
+typedef enum {
+    disable = 0U,                          /*!< Disable */
+    sensors_lux_detection,                 /*!< Sensor Based */
+    auto_glare_detection,                  /*!< Auto */
+    manual_on,                             /*!< Manual Anti-glare On */
+}gtm_glare_detection_type;
+
+/*!
 * \brief Tone Map level.
 * Allows to override Tone Map level defined in the tuning.
 */
@@ -789,6 +800,20 @@ typedef struct {
 } ia_aiq_advanced_ccm_t;
 
 
+/*!
+* \brief Advanced Color Correction Matrix per class Structure Returned by Parameter Adaptor.
+*/
+typedef struct {
+    int32_t *sector_index_array;                               /*!< Sector indices of CC matrices*/
+    float(*advanced_color_conversion_matrices)[3][3];          /*!< Advanced CC matrices. Array of color matrices. Each color matrix optimized using a certain sector. Array size is sector_count. */
+} ia_aiq_advanced_ccm_Segment_t;
+
+/*!
+* \brief Advanced Color Correction Matrix SAP Structure Returned by Parameter Adaptor.
+*/
+typedef struct {
+    ia_aiq_advanced_ccm_Segment_t segments[6];
+} ia_aiq_advanced_ccm_SAP_t;
 
 /*!
 * \brief IR Weight Grid.
@@ -884,15 +909,16 @@ typedef struct {
 * \brief Results from Parameter Adaptor.
 */
 typedef struct {
-    float color_conversion_matrix[3][3];              /*!< CC matrix. */
-    float black_level_4x4[4][4];                    /*!< Black level coefficients of each Bayer channel (absolute level). */
-    ia_aiq_color_channels color_gains;                /*!< RGB gains for each color channels including given (in ia_aiq_pa_input_params) color gains and gains calculated from AWB results. */
-    ia_aiq_color_channels_lut linearization;          /*!< LUTs for linearization of each color channel after black level correction. */
-    float saturation_factor;                          /*!< Saturation factor to increase/decrease saturation.*/
-    float brightness_level;                           /*!< Range [0.0, 1.0]. Indicates level of brightness in the image. */
-    ia_aiq_advanced_ccm_t *preferred_acm;             /*!< Advanced CC matrix. */
-    ia_aiq_ir_weight_t *ir_weight;                    /*!< IR Weight. */
-    ia_aiq_rgbir_t *rgbir;                            /*!< RGB IR. */
+    float color_conversion_matrix[3][3];                        /*!< CC matrix. */
+    float black_level_4x4[4][4];                                /*!< Black level coefficients of each Bayer channel (absolute level). */
+    ia_aiq_color_channels color_gains;                          /*!< RGB gains for each color channels including given (in ia_aiq_pa_input_params) color gains and gains calculated from AWB results. */
+    ia_aiq_color_channels_lut linearization;                    /*!< LUTs for linearization of each color channel after black level correction. */
+    float saturation_factor;                                    /*!< Saturation factor to increase/decrease saturation.*/
+    float brightness_level;                                     /*!< Range [0.0, 1.0]. Indicates level of brightness in the image. */
+    ia_aiq_advanced_ccm_t *preferred_acm;                       /*!< Advanced CC matrix. */
+    ia_aiq_ir_weight_t *ir_weight;                              /*!< IR Weight. */
+    ia_aiq_rgbir_t *rgbir;                                      /*!< RGB IR. */
+    ia_aiq_advanced_ccm_SAP_t* preferred_acm_SAP;               /*!< Advanced CC matrix per segment. */
 } ia_aiq_pa_results_v1;
 
 /*!
