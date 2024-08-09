@@ -19,6 +19,8 @@ ipu7-camera-bins should be copied to build server and target
 # Runtime files
 mkdir -p /lib/firmware/intel/ipu
 cp -r ipu7-camera-bins/lib/firmware/intel/ipu/*.bin /lib/firmware/intel/ipu
+# For developers using engineer samples, try use unsigned FW if authenticate fail:
+# cp -r ipu7-camera-bins/lib/firmware/intel/ipu/unsigned/*.bin /lib/firmware/intel/ipu
 cp ipu7-camera-bins/lib/lib* /usr/lib/
 # Development files
 mkdir -p /usr/include /usr/lib/pkgconfig
