@@ -24,11 +24,13 @@
 #include "ia_coordinate.h"
 #include "ia_aic_types.h"
 
-#ifndef ENABLE_CUSTOMIZED_STD_LIB
-#include <map>
-#else
+#ifdef ENABLE_CUSTOMIZED_STD_LIB
 #include "FixedMap.h"
 #include "FixedList.h"
+#include "FixedVector.h"
+#else
+#include <map>
+#include <vector>
 #endif
 
 namespace cca {
@@ -53,7 +55,11 @@ typedef struct {
  */
 typedef struct {
     uint32_t cb_num;
+#ifdef ENABLE_STL_LIB
+    std::vector<cca_cb_config> cb_config;
+#else
     cca_cb_config cb_config[MAX_PG_NUM];
+#endif
 } cca_aic_config;
 
 /*!
@@ -72,12 +78,22 @@ typedef struct {
 typedef struct {
     int group_id;
     uint32_t num_terminal;
-    cca_terminal_buf terminal_buf[MAX_PG_TERMINAL_NUM];
+
+#ifdef ENABLE_STL_LIB
+    std::vector<cca_terminal_buf> terminal_buf;
+#else
+    cca_terminal_buf terminal_buf[MAX_PG_TERMINAL_NUM * MAX_NUMBER_OF_FRAGMENTS];
+#endif
 } cca_cb_termal_buf;
 
 typedef struct {
     uint32_t cb_num;
+
+#ifdef ENABLE_STL_LIB
+    std::vector<cca_cb_termal_buf> cb_terminal_buf;
+#else
     cca_cb_termal_buf cb_terminal_buf[MAX_PG_NUM];
+#endif
 } cca_aic_terminal_config;
 
 /*!
@@ -99,7 +115,12 @@ typedef struct {
 typedef struct {
     int group_id;
     uint32_t num_kernels;
+
+#ifdef ENABLE_STL_LIB
+    std::vector<cca_kernel_offset> kernels_offset;
+#else
     cca_kernel_offset kernels_offset[MAX_KERNEL_NUM_IN_PG];
+#endif
 } cca_cb_kernel_offset;
 
 /*!
@@ -107,7 +128,11 @@ typedef struct {
  */
 typedef struct {
     uint32_t cb_num;
+#ifdef ENABLE_STL_LIB
+    std::vector<cca_cb_kernel_offset> cb_kernel_offset;
+#else
     cca_cb_kernel_offset cb_kernel_offset[MAX_PG_NUM];
+#endif
 } cca_aic_kernel_offset;
 
 /*!

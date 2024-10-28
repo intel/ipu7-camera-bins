@@ -322,9 +322,9 @@ typedef enum {
 * \brief CMC segmentation network type enumeration.
 */
 typedef enum {
-    seg_net_type_no_segmentation,        /*!< No segmentation */
-    seg_net_type_test_pattern,          /*!< Use test pattern segmentation */
-    seg_net_type_mobile_net_v3_320x180   /*!< mobile_net_v3_320x180 ONNX network*/
+    seg_net_type_no_segmentation, /*!< No segmentation */
+    seg_net_type_test_pattern,    /*!< Use test pattern segmentation */
+    seg_net_type_RVM              /*!< Use ONNX RVM network segmentation */
 } seg_net_type;
 
 /*!
