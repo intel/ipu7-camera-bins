@@ -90,5 +90,7 @@ const uint64_t INVALID_FRAME_ID = static_cast<uint64_t>(-1);
 
 const uint32_t NUM_OF_ACM_SEGMENTS = 6U;
 const uint32_t NUM_OF_SECTORS_PER_SEGMENT = 6U;
+
+const uint32_t MAX_NUMBER_OF_FRAGMENTS = 1U;
 }//cca
 #endif //CCAMACRO_H_
