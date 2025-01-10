@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2021 Intel Corporation
+ * Copyright 2018-2024 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,16 @@ ia_bcomp_init(const ia_cmc_t *ia_cmc, ia_bcomp_dol_mode_t dol_mode,
  */
 LIBEXPORT void
 ia_bcomp_deinit(ia_bcomp *ia_bcomp_ptr);
+
+/*!
+ * \brief Update IA_BCOMP once CMC structure ptr changed.
+ *
+ * \param[in] ia_bcomp                  Mandatory. BCOMP instance handle.
+ * \param[in] ia_cmc                    Mandatory. Pointer to CMC structure
+ *
+ */
+LIBEXPORT void
+ia_bcomp_update_cmc(ia_bcomp* ia_bcomp_ptr, const ia_cmc_t* ia_cmc);
 
 /*!
 * \brief IA_BCOMP parameters to calculate compression info.
