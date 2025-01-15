@@ -242,7 +242,8 @@ class LIBEXPORT IaAic
         int32_t group_id,
         int64_t sequenceId,
         IaCcatStatistics *stats,
-        ia_dvs_statistics *dvs_stat = nullptr);
+        ia_dvs_statistics *dvs_stat = nullptr,
+        bool skip=false);
 
     static  uint32_t getPacOutputSize(const ImagingKernelGroup* kernelGroup);
 

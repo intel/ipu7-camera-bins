@@ -249,11 +249,11 @@ typedef enum
 typedef enum
 {
     ccat_project_adaption_bitmap_0 = 1 << 0,   /*!< is special bw chart detection on */
-    ccat_project_adaption_bitmap_1 = 1 << 1,   /*!< is  is wb face_base bitmap on - if on not give priority to face in LSC */
-    ccat_project_adaption_bitmap_2 = 1 << 2,   /*!< TBD */
-    ccat_project_adaption_bitmap_3 = 1 << 3,   /*!< TBD */
-    ccat_project_adaption_bitmap_4 = 1 << 4,   /*!< TBD */
-    ccat_project_adaption_bitmap_5 = 1 << 5,   /*!< TBD */
+    ccat_project_adaption_bitmap_1 = 1 << 1,   /*!< is wb face_base bitmap on - if on not give priority to face in LSC */
+    ccat_project_adaption_bitmap_2 = 1 << 2,   /*!< is for sthdr ae skip */
+    ccat_project_adaption_bitmap_3 = 1 << 3,   /*!< is for vcx */
+    ccat_project_adaption_bitmap_4 = 1 << 4,   /*!< is for AF document mode in IPU6 */
+    ccat_project_adaption_bitmap_5 = 1 << 5,   /*!< is for MSFT OV02C10 NVM issue */
     ccat_project_adaption_bitmap_6 = 1 << 6,   /*!< TBD */
     ccat_project_adaption_bitmap_7 = 1 << 7,   /*!< TBD */
     ccat_project_adaption_bitmap_8 = 1 << 8,   /*!< TBD */

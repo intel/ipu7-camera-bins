@@ -92,7 +92,7 @@ typedef enum
     ia_pal_uuid_isp_ofs_pp_bodr_regs_1_1 = 31882,
     ia_pal_uuid_isp_linearization2_0 = 10326,
     ia_pal_uuid_isp_lsc_1_2 = 2144,
-    ia_pal_uuid_isp_nntm_1_0 = 28761,
+    ia_pal_uuid_isp_nntm_1_0 = 46539,
     ia_pal_uuid_isp_outputscaler_2_0_a = 6800,
     ia_pal_uuid_isp_outputscaler_2_0_b = 51856,
     ia_pal_uuid_isp_pafstatistics_1_2 = 44308,
@@ -119,19 +119,20 @@ typedef enum
 typedef enum
 {
     ia_pal_uuid_system_api_acm_1_2 = 36320,
-    ia_pal_uuid_system_api_aestatistics_2_1 = 39342,
+    ia_pal_uuid_system_api_aestatistics_2_1 = 6191,
     ia_pal_uuid_system_api_bnlm_3_3 = 5901,
     ia_pal_uuid_system_api_bxt_blc = 12306,
     ia_pal_uuid_system_api_ccm_3a_2_0 = 37617,
+    ia_pal_uuid_system_api_fr_grid_1_0 = 11825,
     ia_pal_uuid_system_api_gammatm_v3 = 54040,
     ia_pal_uuid_system_api_gdc7 = 26430,
     ia_pal_uuid_system_api_io_buffer_1_1 = 50058,
     ia_pal_uuid_system_api_linearization2_0 = 47321,
-    ia_pal_uuid_system_api_lsc_1_2 = 19967,
+    ia_pal_uuid_system_api_lsc_1_2 = 53704,
     ia_pal_uuid_system_api_nntm_1_0 = 10286,
     ia_pal_uuid_system_api_pafstatistics_1_2 = 53308,
     ia_pal_uuid_system_api_pext_1_0 = 29899,
-    ia_pal_uuid_system_api_rgbs_grid_1_1 = 30239,
+    ia_pal_uuid_system_api_rgbs_grid_1_1 = 41868,
     ia_pal_uuid_system_api_tnr7_blend_1_0 = 53161,
 
 } ia_system_api_uuid;

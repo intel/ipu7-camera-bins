@@ -121,13 +121,16 @@
 #include "IntelCCATypes.h"
 #include "IIPUAic.h"
 #include "CCAStorage.h"
+#ifdef INPUTS_IN_FILE
+#include "IntelCCA_file_debug.h"
+#endif  // INPUTS_IN_FILE
 
 namespace cca {
 
 class IntelDVS;
 
 /*!
- * \brief main entrance of CCA Flow lib.
+ * \brief Main entrance of CCA Flow library.
  */
 class LIBEXPORT IntelCCABase {
 public:
@@ -147,7 +150,7 @@ public:
     ia_err init(const cca_init_params& initParams);
 
     /*!
-     * \brief reconfigure dol.
+     * \brief Reconfigure DOL.
      *
      * \param[in] dolMode               Mandatory.\n
      * \param[in] conversionGainRatio   Mandatory.\n
@@ -166,21 +169,19 @@ public:
      */
     ia_err setStatsParams(const cca_stats_params& params);
 
-
     /*!
      * \brief Set Sensor frame parameters. Describe frame scaling/cropping done in sensor.
      *
      * \param[in] frameParams           Mandatory.\n
-     *
      */
-    void   setAiqFrameParams(const ia_aiq_frame_params &frameParams);
+    void setAiqFrameParams(const ia_aiq_frame_params &frameParams);
 
     /*!
      * \brief AEC calculation based on input parameters and frame statistics.
      * AE calculates new exposure parameters to be used for the next frame based on previously given statistics and user parameters.
      *
      * \param[in] frameId               Mandatory.\n
-     *                                  frame sequence Id.
+     *                                  Frame sequence Id.
      * \param[in] params                Mandatory.\n
      *                                  Input parameters for AEC calculations.
      * \param[out] results              Mandatory.\n
@@ -188,186 +189,215 @@ public:
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err runAEC(uint64_t frameId, const cca_ae_input_params& params, cca_ae_results *results);
+
     /*!
      * \brief Run AIQ (Algorithms and Image Quality) Algorithm Group about the captured image.
      * AIQ algorithms need various information about the conditions in which the frame and statistics were captured in order to
      * calculate new parameters.
      *
      * \param[in] frameId               Mandatory.\n
-     *                                  run AIQ algo group for frame with frameId.
+     *                                  Run AIQ algo group for frame with frameId.
      * \param[in] params                Mandatory.\n
      *                                  Input parameters containing statistics information about a frame.
-     * \param [out] results             Mandatory.\n
+     * \param[out] results              Mandatory.\n
      *                                  AIQ results. AF results can be used by ACM driver.
      * \return                          Error code.
      */
     ia_err runAIQ(uint64_t frameId, const cca_aiq_params& params, cca_aiq_results *results);
 
     /*!
-     * \brief reconfigure DVS configuration info when GDC configuration are changed.
+     * \brief Reconfigure DVS configuration info when GDC configuration are changed.
      *
      * \param[in] dvsInitParam          Mandatory.\n
      * \param[in] gdcConfig             Mandatory.\n
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err reconfigDvs(const cca_dvs_init_param& dvsInitParam, const cca_gdc_configurations& gdcConfigs);
+
     /*!
-     * \brief update zoom factor/region/coordinate.
+     * \brief Update zoom factor/region/coordinate.
      * DVS algo supports to zoom the image. Set the zoom params before calling runDVS.
      *
-     * \param[in] StreamId              Mandatory.\n
+     * \param[in] DvsId                 Mandatory.\n
      * \param[in] params                Mandatory.\n
-     *                                  zoom related params.
+     *                                  Zoom related params.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err updateZoom(uint32_t DvsId, const cca_dvs_zoom& params);
+
     /*!
-     * \brief DVS Algorithm calculation based on dvs statistics.
+     * \brief DVS Algorithm calculation based on DVS statistics.
      * DVS uses frameId to search the DVS statistic that decoded and stored in CCA Flow,
      * then calculates the morph table or image transformation for whole image that used by GDC.
      *
-     * \param[in] streamsId             Mandatory.\n
+     * \param[in] DvsId                 Mandatory.\n
      * \param[in] frameId               Mandatory.\n
-     *                                  frame sequence Id.
+     *                                  Frame sequence Id.
+     * \param[in] enable_video_stablization Optional.\n
+     *                                  Enable video stabilization.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err runDVS(uint32_t DvsId, uint64_t frameId, bool enable_video_stablization = false);
+
     /*!
-     * \need reconfigDvs params with usecase(zoom/digitial zoom/video stablization) changing.
-     * driver update all related paramter, then call the interface.
-     *
+     * \brief Reconfigure DVS params with use case (zoom/digital zoom/video stabilization) changing.
+     * Driver updates all related parameters, then calls the interface.
      *
      * \param[in] DvsId                 Mandatory.\n
      * \param[in] dvs_config            Mandatory.\n
      * \param[in] zoom_factor           Mandatory.\n
-     *                                  dvs config params.
+     *                                  DVS config params.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err ConfigDvs(uint32_t DvsId, ia_dvs_configuration_v1* dvs_config, float32_t zoom_factor);
 
+    /*!
+     * \brief Get DVS image transformation output.
+     *
+     * \param[in] DvsId                 Mandatory.\n
+     * \param[in] frameId               Mandatory.\n
+     *                                  Frame sequence Id.
+     * \param[out] ImageTrans           Mandatory.\n
+     *                                  DVS image transformation output.
+     * \return                          Error code for status. zero on success, non-zero on failure
+     */
     ia_err getDvsImageTransformationOutput(uint32_t DvsId, uint64_t frameId, ia_dvs_image_transformation **ImageTrans);
 
     /*!
-     * \brief query the CMC data (camera module characteristic).
-     * get the sensor specific data that stored in tuning file, for example optics/tnr...
+     * \brief Query the CMC data (camera module characteristic).
+     * Get the sensor specific data that stored in tuning file, for example optics/tnr...
      *
      * \param[out] cmc                  Mandatory.\n
      *                                  CMC data.
+     * \param[in] aiq_cpf               Optional.\n
+     *                                  AIQ CPF data.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err getCMC(cca_cmc &cmc, const cca_cpf *aiq_cpf = nullptr);
 
+    /*!
+     * \brief Get CCT white map node.
+     *
+     * \param[in] cur_cct               Mandatory.\n
+     *                                  Current CCT.
+     * \param[out] r_g_gain             Mandatory.\n
+     *                                  R/G gain.
+     * \param[out] b_g_gain             Mandatory.\n
+     *                                  B/G gain.
+     * \return                          Error code for status. zero on success, non-zero on failure
+     */
     ia_err getCCTWhiteMapNode(uint32_t cur_cct, float32_t *r_g_gain, float32_t *b_g_gain);
 
     /*!
-     * \brief query the MKN data (maker notes).
-     * get the maker note data of AIQ generated by algorithms, mainly cover the exif info needs
+     * \brief Query the MKN data (maker notes).
+     * Get the maker note data of AIQ generated by algorithms, mainly cover the exif info needs
      * by JPG and other data for debug purpose.
      *
      * \param[in] type                  Mandatory.\n
-     *                                  mkn type.
+     *                                  MKN type.
      * \param[out] mkn                  Mandatory.\n
-     *                                  mkn data.
+     *                                  MKN data.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err getMKN(ia_mkn_trg type, cca_mkn &mkn);
 
     /*!
-     * \brief add MKN data
+     * \brief Add MKN data.
      *
      * \param[in] a_data_format_id      Mandatory.\n
-     *                                  mkn format id
+     *                                  MKN format id.
      * \param[in] a_data_name_id        Mandatory.\n
-     *                                  mkn data name id
+     *                                  MKN data name id.
      * \param[in] a_data_ptr            Mandatory.\n
-     *                                  pointer to data
+     *                                  Pointer to data.
      * \param[in] a_num_elements        Mandatory.\n
-     *                                  element number
+     *                                  Element number.
      * \param[in] a_key                 Mandatory.\n
      */
     ia_err addMKN(ia_mkn_dfid a_data_format_id, ia_mkn_dnid a_data_name_id, const void *a_data_ptr, uint32_t a_num_elements, const char *a_key);
 
     /*!
-     * \brief get the AIQD (AIQ data).
-     *  Contains various AIQ related information, collected during run-time and subject to
-     *  be stored in a host file system. Host will copy this data, if ia_aiq_data->size > 0
-     *  and ia_aiq_data->data != NULL; AIQ is responsible to deallocate data buffer
-     *  during ia_aiq_deinit().
+     * \brief Get the AIQD (AIQ data).
+     * Contains various AIQ related information, collected during run-time and subject to
+     * be stored in a host file system. Host will copy this data, if ia_aiq_data->size > 0
+     * and ia_aiq_data->data != NULL; AIQ is responsible to deallocate data buffer
+     * during ia_aiq_deinit().
      *
      * \param[out] aiqd                 Mandatory.\n
      *                                  AIQD buffer.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err getAiqd(cca_aiqd &aiqd);
+
     /*!
      * \brief Update tuning data in run time.
-     *  Update the tuning data to CCA flow, the new tuning data will be taken effect immediately.
-     *  For different use cases, the tuning data should be different, the function is used for the scenario.
+     * Update the tuning data to CCA flow, the new tuning data will be taken effect immediately.
+     * For different use cases, the tuning data should be different, the function is used for the scenario.
      *
      * \param[in] tag                   Mandatory.\n
-     *                                  the tag for updated group in tuning file.
+     *                                  The tag for updated group in tuning file.
      * \param[in] lardParams            Mandatory.\n
-     *                                  lard data.
+     *                                  Lard data.
      * \param[in] nvm                   Mandatory.\n
-     *                                  sensor nvm data.
+     *                                  Sensor NVM data.
      * \param[in] aicId                 Optional.\n
-     *                                  the aic id for aic handle
+     *                                  The AIC id for AIC handle.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err updateTuning(uint8_t tag, ia_lard_input_params &lardParams, const cca_nvm &nvm, int32_t aicId = -1);
 
     /*!
      * \brief Update tuning data in run time.
-     *  Update the tuning data to CCA flow, the new tuning data will be taken effect immediately.
-     *  For different use cases, the tuning data should be different, the function is used for the scenario.
+     * Update the tuning data to CCA flow, the new tuning data will be taken effect immediately.
+     * For different use cases, the tuning data should be different, the function is used for the scenario.
      *
      * \param[in] tag                   Mandatory.\n
-     *                                  the tag for updated group in tuning file.
+     *                                  The tag for updated group in tuning file.
      * \param[in] lardParams            Mandatory.\n
-     *                                  lard data.
+     *                                  Lard data.
      * \param[in] nvm                   Mandatory.\n
-     *                                  sensor nvm data.
+     *                                  Sensor NVM data.
      * \param[in] aicId                 Optional.\n
-     *                                  the aic id for aic handle
+     *                                  The AIC id for AIC handle.
      * \param[out] pLardResults         Mandatory.\n
-     *                                  lard results
+     *                                  Lard results.
      * \return                          Error code for status. zero on success, non-zero on failure
-    */
+     */
     ia_err updateTuning(uint8_t tag, ia_lard_input_params &lardParams, const cca_nvm &nvm, ia_lard_results **pLardResults, int32_t aicId = -1);
 
     /*!
-     * \brief parse embedded data in run time.
+     * \brief Parse embedded data in run time.
      *
-     * \param[in] bin                       Mandatory.\n
-     *                                      embedded data
-     * \param[in] mode                      Mandatory.\n
-     *
-     * \param[in] SnrDesc                   Mandatory.\n
-     *                                      Sensor specific descriptor and limits of the used sensor mode for target frame use.
-     * \param[out] result                   Mandatory.\n
-     *                                      embedded results
-     * \return                              Error code for status. zero on success, non-zero on failure
+     * \param[in] bin                   Mandatory.\n
+     *                                  Embedded data.
+     * \param[in] mode                  Mandatory.\n
+     *                                  EMD mode.
+     * \param[in] snrDesc               Mandatory.\n
+     *                                  Sensor specific descriptor and limits of the used sensor mode for target frame use.
+     * \param[out] result               Mandatory.\n
+     *                                  Embedded results.
+     * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err runEmdDecoder(const ia_binary_data &bin, const ia_emd_mode_t &mode, const ia_aiq_exposure_sensor_descriptor &snrDesc, ia_emd_result_t **result);
 
     /*!
      * \brief De-initialize CCA Flow and its submodules.
-     * All memory allocated by algoriths are freed. CCA Flow handle can no longer be used.
+     * All memory allocated by algorithms are freed. CCA Flow handle can no longer be used.
      *
      * \return                          Error code for status. zero on success, non-zero on failure
      */
     ia_err deinit();
 
     /*!
-     * \brief query the current CCA Flow version.
+     * \brief Query the current CCA Flow version.
      *
-     * \return                          version.
+     * \return                          Version.
      */
     const char* getVersion() const;
 
     /*!
      * \brief Get lard data.
-     *  Get lard results parsed from aiqb.
+     * Get lard results parsed from AIQB.
      *
      * \param[out] lard                 Mandatory.\n
      *                                  lard data
@@ -396,16 +426,6 @@ public:
     * \return                          Error code for status. zero on success, non-zero on failure
     */
     ia_err saveAiqResults(uint64_t frameId, const cca_aiq_results_storage &results);
-
-    /*!
-    * \brief Get Aiq results.
-    *  assign external Aiq results to internal CCAStorage.
-    *
-    * \param[out] results              Mandatory.\n
-    *                                  Aiq results
-    * \return                          Error code for status. zero on success, non-zero on failure
-    */
-    ia_err assignAiqResults(uint64_t frameId, const cca_aiq_results_storage &results);
 
     /*!
     * \brief Reload new cpf data and updates ISP tuning for a specific aic id. Used for IQ simulator mid pipe injection.
@@ -443,8 +463,8 @@ protected:
     void deinitAiq();
     void deleteSaResultsGrids();
     void copySaResults(const ia_aiq_sa_results_v1* saResult);
-    void initAicb(const cca_cpf& aiqCpf);
-    void deInitAicb();
+    void initAiqb(const cca_cpf& aiqCpf);
+    void deInitAiqb();
 
 protected:
     virtual ia_err setStatsToAiq(const cca_stats_params &params, const cca_aiq_results_storage &aiqResults) = 0;
@@ -473,9 +493,9 @@ protected:
     /*
      * aiqb and cmc
      */
-    ia_binary_data mAicb;
+    ia_binary_data mAiqb;
     ia_cmc_t* mParsedCMC;
-    bool mAicbInited;
+    bool mAiqbInited;
 
     /*
      * NVM
@@ -557,6 +577,9 @@ protected:
     * mEnableUsingLardResultToInitCCA - whether using lard result to init cca
     */
     bool mEnableUsingLardResultToInitCCA;
+#ifdef INPUTS_IN_FILE
+    cca_debug_t *mDebug = nullptr;
+#endif  // INPUTS_IN_FILE
     int8_t reserve[24];
 };
 }//cca
