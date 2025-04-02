@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2024 Intel Corporation
+ * Copyright 2012-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -647,8 +647,35 @@ typedef struct
 LIBEXPORT ia_err
 ia_aiq_sensor_events_set_v2(ia_aiq *a_ia_aiq_ptr,
                             const ia_aiq_sensor_events_v2 *sensor_events_input);
+/*!
+ * \brief Segment downscaling and align with RGBS grids.
+ * Some of the AIQ algorithms benefit from segment map which tells about content in image
+ *
+ * \param[in] ia_aiq_segmap_input_params    Mandatory.\n
+ *                                          Parameters for segmap.
+ * \param[in] ia_segmap_grid               Mandatory.\n
+ *                                          Segment map.
+ * \return                                  Error code.
+ */
+LIBEXPORT ia_err
+ia_aiq_segmap_decode(
+    const ia_aiq_segmap_input_params* segmap_input,
+    ia_segmap_grid* segmap_grid_ptr);
 
-
+/*!
+ * \brief Set segmap grids into Aiq handle.
+ * Some of the AIQ algorithms benefit from segment map which tells about content in image
+ *
+ * \param[in] ia_aiq_ptr                    Mandatory.\n
+ *                                          AIQ instance handle.
+ * \param[in] ia_segmap_grid               Mandatory.\n
+ *                                          Segment map.
+ * \return                                  Error code.
+ */
+LIBEXPORT ia_err
+ia_aiq_segmap_set(
+    ia_aiq* a_ia_aiq_ptr,
+    const ia_segmap_grid* segmap_ptr);
 
 /*!
  * \brief Get version.

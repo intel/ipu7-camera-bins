@@ -1,5 +1,5 @@
 /*
-* Copyright 2018-2024 Intel Corporation
+* Copyright 2018-2025 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -165,7 +165,7 @@ struct IaAicInputParams
     ia_rectify_parameters_t const *rectifyParams;   /*!< Optional. Rectification running in GDC7 for UV mapping */
     ia_bcomp_results const *bcompResults;           /*!< Optional.  bit-compression curves. */
     ia_nntm_parameters_t *nntmParams;               /*!< Optional.  Neural network tone mapping parameters. */
-    ia_faces_roi_results* face_roi;                     /*!< Optional. Face detection ROI parameters.*/
+    ia_faces_roi_results* face_roi;                 /*!< Optional. Face detection ROI parameters.*/
 #ifdef USE_SCD
     ia_aiq_scd_results* scd_results;                 /*!< Mandatory. SCD results which are to be used to calculate scene change magnitude. */
 #endif

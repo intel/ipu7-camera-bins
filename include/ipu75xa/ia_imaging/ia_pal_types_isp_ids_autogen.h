@@ -41,6 +41,7 @@ typedef enum
     ia_pal_uuid_isp_acm_1_2 = 17531,
     ia_pal_uuid_isp_aestatistics_2_1 = 55073,
     ia_pal_uuid_isp_b2i_ds_1_1 = 40299,
+    ia_pal_uuid_isp_sw_scaler = 19706,
     ia_pal_uuid_isp_bnlm_3_3 = 21777,
     ia_pal_uuid_isp_bxt_blc = 11700,
     ia_pal_uuid_isp_bxt_demosaic = 48695,

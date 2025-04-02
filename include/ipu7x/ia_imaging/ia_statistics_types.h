@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2024 Intel Corporation
+ * Copyright 2018-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,11 +88,10 @@ typedef struct
     int32_t        rop_angle;                /**< ROP (rotation out of plane) angle in degrees. */
 } ia_face_roi;
 
-
 typedef struct
 {
     uint32_t num_faces;         /*!< Number of faces detected.*/
-    ia_rectangle* faces;       /*!< ROI array of all detected faces.*/
+    ia_face_roi* faces;        /*!< ROI array of all detected faces.*/
 }ia_faces_roi_results;
 
 #define IA_DEPTH_GRID_SIZE (IA_DEPTH_GRID_WIDTH * IA_DEPTH_GRID_HEIGHT)
@@ -115,5 +114,30 @@ typedef struct
     int depth_data[IA_DEPTH_GRID_SIZE];           /*!< Depth data (type of data is defined by ia_depth_data_type) */
     unsigned char confidence[IA_DEPTH_GRID_SIZE]; /*!< Confidence level */
 } ia_depth_grid;
+
+/*!
+ * \brief Statistics grid with Segmap including class and confidence level.
+ * Total size is defined by 2 * width * height of the grid.
+ */
+typedef struct
+{
+    unsigned int grid_width;                             /*!< Mandatory. Width of segmap grids. */
+    unsigned int grid_height;                            /*!< Mandatory. Height of segmap grids. */
+    unsigned char class_id_conf[IA_RGBS_GRID_SIZE];           /*!< Mandatory. Class id and Confidence level data. [0, 15]. */
+    uint64_t frame_id;
+} ia_segmap_grid;
+
+/*!
+ * \brief ACS (ambient light sensor) statistics
+ */
+typedef struct
+{
+    bool        is_valid;       /*!< is ACS data valid*/
+    float32_t   lux_level;      /*!< lux levels as measured by ACS sensor*/
+    float64_t   cct;            /*!< Color correlated temperature (CCT) as measured by ACS sensor*/
+    float64_t   chroma_x;       /*!< CIE1931 x coordinate as measured by ACS sensor*/
+    float64_t   chroma_y;       /*!< CIE1931 y coordinate as measured by ACS sensor*/
+    uint64_t    timestamp;      /*!< timestamp of the ACS sensor read*/
+} ia_acs_stats;
 
 #endif /* __IA_STATISTICS_TYPES_H_ */

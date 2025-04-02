@@ -111,7 +111,8 @@ enum CCAModuleBitMap {
     CCA_MODULE_BCOM = 1 << 9,
     CCA_MODULE_LARD = 1 << 10,
     CCA_MODULE_EMDED = 1 << 11,
-    CCA_MODULE_ALL = (1 << 12) - 1,
+    CCA_MODULE_DSD = 1 << 12,
+    CCA_MODULE_ALL = (1 << 13) - 1,
 };
 
 /*!
@@ -393,6 +394,7 @@ typedef struct {
  * \brief Structure for PA input parameters.
  */
 typedef struct {
+    float32_t extra_gain;  /*!< Use to recalculate the pa output color_gains. */
     ia_aiq_color_channels color_gains; /*!< RGB gains for each color channel. */
     bool enable_gtm_desaturation; /*!< Flag indicating if GTM desaturation is enabled. */
 } cca_pa_input_params;
@@ -404,6 +406,13 @@ typedef struct {
     float32_t manual_convergence_time; /*!< Manual convergence time in seconds. Allows override of tunings for LSC transition interval. */
     bool lsc_on; /*!< Flag indicating if LSC results should be returned. */
 } cca_sa_input_params;
+
+/*!
+ * \brief Structure for DSD (Determine scene) input and output parameters.
+ */
+typedef struct {
+    ia_aiq_scene_mode scene_modes;  /*!<which scene modes should be detected or returned by DSD*/
+} cca_dsd_params;
 
 /*!
  * \brief Structure for SA results.
@@ -448,6 +457,7 @@ typedef struct {
     cca_gbce_input_params gbce_input; /*!< GBCE input parameters. */
     cca_pa_input_params pa_input; /*!< PA input parameters. */
     cca_sa_input_params sa_input; /*!< SA input parameters. */
+    cca_dsd_params dsd_input; /*!< DSD input parameters. */
 } cca_aiq_params;
 
 /*!
@@ -459,6 +469,7 @@ typedef struct {
     cca_sa_results sa_output; /*!< SA algorithm output. */
     cca_gbce_params gbce_output; /*!< GBCE algorithm output. */
     cca_pa_params pa_output; /*!< PA algorithm output. */
+    cca_dsd_params dsd_output; /*!< DSD algorithm output. */
 } cca_aiq_results;
 
 /*!
