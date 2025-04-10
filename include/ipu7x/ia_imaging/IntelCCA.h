@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Intel Corporation.
+ * Copyright (C) 2025 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,15 @@
 #ifndef INTEL_CCA_H_
 #define INTEL_CCA_H_
 
-#include "IntelCCABase.h"
 #include "IIPUAic.h"
+#include "IntelCCABase.h"
 
 namespace cca {
+
+/**
+ * @brief SegMapQueue for internal usage.
+ */
+class SegMapQueue;
 
 /*!
  * \brief Main entrance of CCA Flow library.
@@ -53,17 +58,20 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
     ia_err reinitAiq();
 
     /*!
-     * \brief Configure the kernels of the pipeline, register all kernel offsets, and return the terminal number and payload size.
+     * \brief Configure the kernels of the pipeline, register all kernel offsets, and return the
+     * terminal number and payload size.
      *
      * \param[in] conf Kernel list for the pipeline.
      * \param[in] offset Kernel offsets.
      * \param[out] termConfig Terminal payload number and size.
      * \param[in] aicId (Optional) The ID for AIC handle. Default is -1.
-     * \param[in] statsBufToTermId (Optional) Mapping from statistics buffer type to terminal ID. Default is nullptr.
+     * \param[in] statsBufToTermId (Optional) Mapping from statistics buffer type to terminal ID.
+     * Default is nullptr.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
     ia_err configAIC(const cca_aic_config &conf, const cca_aic_kernel_offset &offset,
-                     cca_aic_terminal_config &termConfig, int32_t aicId = -1, const int32_t* statsBufToTermId = nullptr);
+                     cca_aic_terminal_config &termConfig, int32_t aicId = -1,
+                     const int32_t *statsBufToTermId = nullptr);
 
     /*!
      * \brief Register payload buffers to AIC.
@@ -92,7 +100,7 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] aicId (Optional) The ID for AIC handle. Default is -1.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    ia_err decodeStats(int32_t groupId, int64_t seqId, int32_t aicId = -1, bool skip=false);
+    ia_err decodeStats(int32_t groupId, int64_t seqId, int32_t aicId = -1, bool skip = false);
 
     /*!
      * \brief Run AIC to get PAL binary for IPU7 HW.
@@ -105,8 +113,16 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] aicId (Optional) The ID for AIC handle. Default is -1.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    ia_err runAIC(uint64_t frameId, const cca_pal_input_params& params,
-                  cca_multi_pal_output& output, uint8_t bitmap = UINT8_MAX, int32_t aicId = -1);
+    ia_err runAIC(uint64_t frameId, const cca_pal_input_params &params,
+                  cca_multi_pal_output &output, uint8_t bitmap = UINT8_MAX, int32_t aicId = -1);
+
+    /*!
+     * \brief Set input information about the segmap.
+     *
+     * \param[in] params segmap information about a frame.
+     * \return Error code for status. zero on success, non-zero on failure
+     */
+    ia_err setSegMap(const ia_aiq_segmap_input_params *params);
 
     /*!
      * \brief Get PAL input data.
@@ -118,7 +134,8 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] aicId (Optional) The ID for AIC handle. Default is -1.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    ia_err GetPalInputData(uint32_t stream_id, int32_t seq_id, ia_binary_data* aic_output_common, ia_binary_data* tuning_output, int32_t aicId = -1);
+    ia_err GetPalInputData(uint32_t stream_id, int32_t seq_id, ia_binary_data *aic_output_common,
+                           ia_binary_data *tuning_output, int32_t aicId = -1);
 
     /*!
      * \brief Run AIC to get PAL binary for IPU7 HW.
@@ -142,7 +159,8 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] aicId (Optional) The ID for AIC handle. Default is -1.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    ia_err runKernels(uint32_t groupId, uint64_t frameId, cca_binary_data *output_data, uint32_t fragment_index = 0U, int32_t aicId = -1);
+    ia_err runKernels(uint32_t groupId, uint64_t frameId, cca_binary_data *output_data,
+                      uint32_t fragment_index = 0U, int32_t aicId = -1);
 
     /*!
      * \brief Get PAC output size.
@@ -150,7 +168,7 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] programGroup Program group.
      * \return PAC output size.
      */
-    static uint32_t getPacOutputSize(const cca_program_group& programGroup);
+    static uint32_t getPacOutputSize(const cca_program_group &programGroup);
 
     /*!
      * \brief Update configuration resolutions.
@@ -160,7 +178,8 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] isKeyResolutionChanged Flag indicating if key resolution has changed.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    ia_err updateConfigurationResolutions(const cca_aic_config& conf, int32_t aicId, bool isKeyResolutionChanged);
+    ia_err updateConfigurationResolutions(const cca_aic_config &conf, int32_t aicId,
+                                          bool isKeyResolutionChanged);
 
     /*!
      * \brief Query statistics buffer.
@@ -169,7 +188,8 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] frameId Frame ID. Default is cca::INVALID_FRAME_ID.
      * \return Pointer to the frame statistics.
      */
-    cca_frame_stats* queryStatsBuf(cca_stats_buf_status status, uint64_t frameId = cca::INVALID_FRAME_ID);
+    cca_frame_stats *queryStatsBuf(cca_stats_buf_status status,
+                                   uint64_t frameId = cca::INVALID_FRAME_ID);
 
  private:
     /*!
@@ -181,7 +201,8 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] aiqResults AIQ results from the corresponding frame.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    virtual ia_err setStatsToAiq(const cca_stats_params &params, const cca_aiq_results_storage &aiqResults) override;
+    virtual ia_err setStatsToAiq(const cca_stats_params &params,
+                                 const cca_aiq_results_storage &aiqResults) override;
 
     /*!
      * \brief Set LTM tuning data.
@@ -199,7 +220,7 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      *
      * \param[in] results Pointer to the 3A+ results.
      */
-    virtual void updateLtmResult(cca_3a_plus_results* results) override {
+    virtual void updateLtmResult(cca_3a_plus_results *results) override {
         if (results != nullptr) {
             results->drc_params = nullptr;
             results->ltm_results = nullptr;
@@ -228,9 +249,10 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] aic_stream_ids AIC stream IDs.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    virtual ia_err initAic(const ia_binary_data *aiqb, const ia_cmc_t *cmc, uint32_t max_stats_width,
-                           uint32_t max_stats_height, uint32_t max_num_stats_in, const ia_mkn *mkn,
-                           const cca_stream_ids& aic_stream_ids) override;
+    virtual ia_err initAic(const ia_binary_data *aiqb, const ia_cmc_t *cmc,
+                           uint32_t max_stats_width, uint32_t max_stats_height,
+                           uint32_t max_num_stats_in, const ia_mkn *mkn,
+                           const cca_stream_ids &aic_stream_ids) override;
 
     /*!
      * \brief Update AIC tuning.
@@ -240,7 +262,8 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] streamId (Optional) Stream ID. Default is -1.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    virtual ia_err updateAicTuning(const ia_binary_data *aiqb, const ia_cmc_t *cmc, int32_t streamId = -1) override;
+    virtual ia_err updateAicTuning(const ia_binary_data *aiqb, const ia_cmc_t *cmc,
+                                   int32_t streamId = -1) override;
 
     /*!
      * \brief Get DVS statistics from AIC.
@@ -248,13 +271,14 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[out] stats Pointer to the DVS statistics.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
-    virtual ia_err getDvsStatsAic(ia_dvs_statistics* stats) override;
+    virtual ia_err getDvsStatsAic(ia_dvs_statistics *stats) override;
 
-private:
+ private:
     ia_ccat_frame_parameters mFrameParameters{}; /*!< Frame parameters. */
-    IPU7Aic* mAic; /*!< Pointer to the IPU7 AIC instance. */
+    IPU7Aic *mAic;                               /*!< Pointer to the IPU7 AIC instance. */
+    SegMapQueue *mSegMapQueue;                   /*!< Pointer to the SegMapQueue instance. */
 };
 
-} // namespace cca
+}  // namespace cca
 
-#endif // INTEL_CCA_H_
+#endif  // INTEL_CCA_H_

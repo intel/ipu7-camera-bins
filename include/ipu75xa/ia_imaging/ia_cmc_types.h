@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Intel Corporation
+ * Copyright 2021-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1543,11 +1543,16 @@ typedef struct
     int32_t *y_coords;             /*Array of y coordinates for sensor decompand curve. Count of array is equal number_of_point*/
 } cmc_parsed_cbd_t;
 
+#define SEG_NET_VERSION_SIZE   3U
+#define SEG_NET_CRC_CODE_SIZE   128U
 
 typedef struct
 {
     ia_mkn_record_header header;    /*!< Record header with Format ID: UInt16 (See AIQB_DataID) Name ID: cmc_name_id_seg_net. (enum cmc_name_id). */
     seg_net_type seg_net_type;
+    uint16_t seg_net_file_version[SEG_NET_VERSION_SIZE];
+    uint8_t seg_net_checksum[SEG_NET_CRC_CODE_SIZE];
+
 } seg_net_info_t;
 
 

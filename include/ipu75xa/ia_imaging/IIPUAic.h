@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2024 Intel Corporation.
+ * Copyright (C) 2020-2025 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -424,6 +424,13 @@ public:
      */
     static uint32_t getPalSize(const cca_program_group& programGroup);
 
+    /*!
+     * \brief Get if PdafT3AsPdafT2 mode.
+     *
+     * \return true when it's PdafT3AsPdafT2 mode, false otherwise.
+     */
+    bool getPdafT3AsPdafT2Mode(void) { return mPdafT3AsPdafT2; }
+
 private:
     /*!
      * \brief Initialize statistics list.
@@ -469,6 +476,7 @@ private:
 #ifdef ENABLE_DVS
     ia_dvs_statistics mDvsStatistics{};
 #endif
+    bool mPdafT3AsPdafT2 = false;
 };
 
 }//cca

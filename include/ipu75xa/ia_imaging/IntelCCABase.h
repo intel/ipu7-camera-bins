@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2024 Intel Corporation.
+ * Copyright (C) 2019-2025 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@
  *
  * \section general General info
  *
- * CCA Flow APIs have been designed to be re-entrant. Each algorithm function can be called multiple times per frame.
- * Input parameters for the algorithms define what is the output ie. running an algorithm with same input parameters
- * and same statistics produce the same output.
+ * CCA Flow APIs have been designed to be re-entrant. Each algorithm function can be called multiple
+ * times per frame. Input parameters for the algorithms define what is the output ie. running an
+ * algorithm with same input parameters and same statistics produce the same output.
  *
- * CCA Flow (Camera Control Algorithms Flow) library contains several algorithm which are used to modify RAW image.
- * Currently following features and algorithms are supported:
+ * CCA Flow (Camera Control Algorithms Flow) library contains several algorithm which are used to
+ * modify RAW image. Currently following features and algorithms are supported:
  * - \ref aec (Automatic Exposure Control)
  * - \ref aiq (Algorithms and Image Quality Algorithm Group) including sub-algorithm
  *  - awb (Automatic White Balance)
@@ -41,10 +41,10 @@
  * - \ref running
  * - \ref deinit
  *
- * Some AIQ algorithms require coordinates as inputs to specify a certain area in the image. Coordinates are relative to
- * the statistics thus not necessarily the whole sensor area. Coordinates are not absolute but relative. See \link ia_coordinate.h \endlink
- * for detailed description of the used coordinate system.
- * <br><hr><br>
+ * Some AIQ algorithms require coordinates as inputs to specify a certain area in the image.
+ * Coordinates are relative to the statistics thus not necessarily the whole sensor area.
+ * Coordinates are not absolute but relative. See \link ia_coordinate.h \endlink for detailed
+ * description of the used coordinate system. <br><hr><br>
  *
  * \section init Initialization of CCA Flow library
  *
@@ -58,24 +58,25 @@
  * \section stats Setting of frame statistics
  *
  * Algorithms depend on statistics collected from the RAW image. Some or all of the statistics are
- * calculated by the ISP after RAW image capture from camera sensor. These statistics are always collected from
- * captured image data.
+ * calculated by the ISP after RAW image capture from camera sensor. These statistics are always
+ * collected from captured image data.
  *
  * \copybrief setStatsParams
  * To set statistics for algorithms CCA Flow library, one must call function:
  * \code cca::IntelCCA::setStatsParams \endcode
  * \copydetails cca::IntelCCA::setStatsParams
  *
- * Algorithms can also utilize external sensor data for making better decisions. For example external light sensor
- * can be used by AEC to determine correct cold start exposure parameters when AEC is called the first time without
- * statistics.
+ * Algorithms can also utilize external sensor data for making better decisions. For example
+ * external light sensor can be used by AEC to determine correct cold start exposure parameters when
+ * AEC is called the first time without statistics.
  *
  * <br><hr><br>
  *
  * \section running Running AIQ/AEC/LTM/DVS/AIC algorithms
  *
- * Once the CCA Flow instance is initialized and statistics are set, algorithms can be run in any order. But AIC must be last one, because the algo shall
- * collect other algo results to generate the PAL for IPU HW.
+ * Once the CCA Flow instance is initialized and statistics are set, algorithms can be run in any
+ * order. But AIC must be last one, because the algo shall collect other algo results to generate
+ * the PAL for IPU HW.
  *
  * \subsection aiq AIQ
  * \copybrief cca::IntelCCA::runAIQ
@@ -118,9 +119,9 @@
 #ifndef INTEL_CCA_BASE_H_
 #define INTEL_CCA_BASE_H_
 
-#include "IntelCCATypes.h"
-#include "IIPUAic.h"
 #include "CCAStorage.h"
+#include "IIPUAic.h"
+#include "IntelCCATypes.h"
 #ifdef INPUTS_IN_FILE
 #include "IntelCCA_file_debug.h"
 #endif  // INPUTS_IN_FILE
@@ -133,21 +134,24 @@ class IntelDVS;
  * \brief Main entrance of CCA Flow library.
  */
 class LIBEXPORT IntelCCABase {
-public:
+ public:
     IntelCCABase();
     virtual ~IntelCCABase();
     /*!
      * \brief initialize the CCA Flow and sub-algos.
-     * This function must be called before any other function in the library. It allocates memories for all CCA Flow algorithms based on input parameters
-     * given by the user. AIQB (from CPFF) and NVM data are parsed and combined resulting camera module specific tuning parameters which the
-     * AIQ algorithms use. Initialization returns a handle to the CCA Flow instance, which is given as input parameter for all the
-     * algorithms. Therefore, multiple instances of CCA Flow library can running simultaneously. For example one instance per camera.
+     * This function must be called before any other function in the library. It allocates memories
+     * for all CCA Flow algorithms based on input parameters given by the user. AIQB (from CPFF) and
+     * NVM data are parsed and combined resulting camera module specific tuning parameters which the
+     * AIQ algorithms use. Initialization returns a handle to the CCA Flow instance, which is given
+     * as input parameter for all the algorithms. Therefore, multiple instances of CCA Flow library
+     * can running simultaneously. For example one instance per camera.
      *
      * \param[in] initParams            Mandatory.\n
-     *                                  Input parameters containing tuning/nvm and configuration for sub-algos.
+     *                                  Input parameters containing tuning/nvm and configuration for
+     * sub-algos.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err init(const cca_init_params& initParams);
+    ia_err init(const cca_init_params &initParams);
 
     /*!
      * \brief Reconfigure DOL.
@@ -160,14 +164,15 @@ public:
 
     /*!
      * \brief Set input statistics and information (e.g faces) about the captured image.
-     * CCA Flow algorithms need various information about the conditions in which the frame and statistics were captured in order to
-     * calculate new parameters.
+     * CCA Flow algorithms need various information about the conditions in which the frame and
+     * statistics were captured in order to calculate new parameters.
      *
      * \param[in] params                Mandatory.\n
-     *                                  Input parameters containing statistics information about a frame.
+     *                                  Input parameters containing statistics information about a
+     * frame.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err setStatsParams(const cca_stats_params& params);
+    ia_err setStatsParams(const cca_stats_params &params);
 
     /*!
      * \brief Set Sensor frame parameters. Describe frame scaling/cropping done in sensor.
@@ -178,32 +183,35 @@ public:
 
     /*!
      * \brief AEC calculation based on input parameters and frame statistics.
-     * AE calculates new exposure parameters to be used for the next frame based on previously given statistics and user parameters.
+     * AE calculates new exposure parameters to be used for the next frame based on previously given
+     * statistics and user parameters.
      *
      * \param[in] frameId               Mandatory.\n
      *                                  Frame sequence Id.
      * \param[in] params                Mandatory.\n
      *                                  Input parameters for AEC calculations.
      * \param[out] results              Mandatory.\n
-     *                                  Results from AEC calculations. Results can be used directly as input for AIC/sensor driver.
+     *                                  Results from AEC calculations. Results can be used directly
+     * as input for AIC/sensor driver.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err runAEC(uint64_t frameId, const cca_ae_input_params& params, cca_ae_results *results);
+    ia_err runAEC(uint64_t frameId, const cca_ae_input_params &params, cca_ae_results *results);
 
     /*!
      * \brief Run AIQ (Algorithms and Image Quality) Algorithm Group about the captured image.
-     * AIQ algorithms need various information about the conditions in which the frame and statistics were captured in order to
-     * calculate new parameters.
+     * AIQ algorithms need various information about the conditions in which the frame and
+     * statistics were captured in order to calculate new parameters.
      *
      * \param[in] frameId               Mandatory.\n
      *                                  Run AIQ algo group for frame with frameId.
      * \param[in] params                Mandatory.\n
-     *                                  Input parameters containing statistics information about a frame.
+     *                                  Input parameters containing statistics information about a
+     * frame.
      * \param[out] results              Mandatory.\n
      *                                  AIQ results. AF results can be used by ACM driver.
      * \return                          Error code.
      */
-    ia_err runAIQ(uint64_t frameId, const cca_aiq_params& params, cca_aiq_results *results);
+    ia_err runAIQ(uint64_t frameId, const cca_aiq_params &params, cca_aiq_results *results);
 
     /*!
      * \brief Reconfigure DVS configuration info when GDC configuration are changed.
@@ -212,7 +220,8 @@ public:
      * \param[in] gdcConfig             Mandatory.\n
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err reconfigDvs(const cca_dvs_init_param& dvsInitParam, const cca_gdc_configurations& gdcConfigs);
+    ia_err reconfigDvs(const cca_dvs_init_param &dvsInitParam,
+                       const cca_gdc_configurations &gdcConfigs);
 
     /*!
      * \brief Update zoom factor/region/coordinate.
@@ -223,7 +232,7 @@ public:
      *                                  Zoom related params.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err updateZoom(uint32_t DvsId, const cca_dvs_zoom& params);
+    ia_err updateZoom(uint32_t DvsId, const cca_dvs_zoom &params);
 
     /*!
      * \brief DVS Algorithm calculation based on DVS statistics.
@@ -249,7 +258,7 @@ public:
      *                                  DVS config params.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err ConfigDvs(uint32_t DvsId, ia_dvs_configuration_v1* dvs_config, float32_t zoom_factor);
+    ia_err ConfigDvs(uint32_t DvsId, ia_dvs_configuration_v1 *dvs_config, float32_t zoom_factor);
 
     /*!
      * \brief Get DVS image transformation output.
@@ -261,7 +270,8 @@ public:
      *                                  DVS image transformation output.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err getDvsImageTransformationOutput(uint32_t DvsId, uint64_t frameId, ia_dvs_image_transformation **ImageTrans);
+    ia_err getDvsImageTransformationOutput(uint32_t DvsId, uint64_t frameId,
+                                           ia_dvs_image_transformation **ImageTrans);
 
     /*!
      * \brief Query the CMC data (camera module characteristic).
@@ -314,7 +324,8 @@ public:
      *                                  Element number.
      * \param[in] a_key                 Mandatory.\n
      */
-    ia_err addMKN(ia_mkn_dfid a_data_format_id, ia_mkn_dnid a_data_name_id, const void *a_data_ptr, uint32_t a_num_elements, const char *a_key);
+    ia_err addMKN(ia_mkn_dfid a_data_format_id, ia_mkn_dnid a_data_name_id, const void *a_data_ptr,
+                  uint32_t a_num_elements, const char *a_key);
 
     /*!
      * \brief Get the AIQD (AIQ data).
@@ -332,7 +343,8 @@ public:
     /*!
      * \brief Update tuning data in run time.
      * Update the tuning data to CCA flow, the new tuning data will be taken effect immediately.
-     * For different use cases, the tuning data should be different, the function is used for the scenario.
+     * For different use cases, the tuning data should be different, the function is used for the
+     * scenario.
      *
      * \param[in] tag                   Mandatory.\n
      *                                  The tag for updated group in tuning file.
@@ -344,12 +356,14 @@ public:
      *                                  The AIC id for AIC handle.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err updateTuning(uint8_t tag, ia_lard_input_params &lardParams, const cca_nvm &nvm, int32_t aicId = -1);
+    ia_err updateTuning(uint8_t tag, ia_lard_input_params &lardParams, const cca_nvm &nvm,
+                        int32_t aicId = -1);
 
     /*!
      * \brief Update tuning data in run time.
      * Update the tuning data to CCA flow, the new tuning data will be taken effect immediately.
-     * For different use cases, the tuning data should be different, the function is used for the scenario.
+     * For different use cases, the tuning data should be different, the function is used for the
+     * scenario.
      *
      * \param[in] tag                   Mandatory.\n
      *                                  The tag for updated group in tuning file.
@@ -363,7 +377,8 @@ public:
      *                                  Lard results.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err updateTuning(uint8_t tag, ia_lard_input_params &lardParams, const cca_nvm &nvm, ia_lard_results **pLardResults, int32_t aicId = -1);
+    ia_err updateTuning(uint8_t tag, ia_lard_input_params &lardParams, const cca_nvm &nvm,
+                        ia_lard_results **pLardResults, int32_t aicId = -1);
 
     /*!
      * \brief Parse embedded data in run time.
@@ -373,12 +388,15 @@ public:
      * \param[in] mode                  Mandatory.\n
      *                                  EMD mode.
      * \param[in] snrDesc               Mandatory.\n
-     *                                  Sensor specific descriptor and limits of the used sensor mode for target frame use.
+     *                                  Sensor specific descriptor and limits of the used sensor
+     * mode for target frame use.
      * \param[out] result               Mandatory.\n
      *                                  Embedded results.
      * \return                          Error code for status. zero on success, non-zero on failure
      */
-    ia_err runEmdDecoder(const ia_binary_data &bin, const ia_emd_mode_t &mode, const ia_aiq_exposure_sensor_descriptor &snrDesc, ia_emd_result_t **result);
+    ia_err runEmdDecoder(const ia_binary_data &bin, const ia_emd_mode_t &mode,
+                         const ia_aiq_exposure_sensor_descriptor &snrDesc,
+                         ia_emd_result_t **result);
 
     /*!
      * \brief De-initialize CCA Flow and its submodules.
@@ -393,7 +411,7 @@ public:
      *
      * \return                          Version.
      */
-    const char* getVersion() const;
+    const char *getVersion() const;
 
     /*!
      * \brief Get lard data.
@@ -406,95 +424,101 @@ public:
     ia_err getLardData(cca_lard_data *lard);
 
     /*!
-    * \brief Get Aiq results.
-    *  Get Aiq results parsed from CCAStorage.
-    *
-    * \param[in] frameId               Mandatory.\n
-    *                                  Get Aiq result for frame with frameId.
-    * \param[out] results              Mandatory.\n
-    *                                  Aiq results
-    * \return                          Error code for status. zero on success, non-zero on failure
-    */
-    ia_err queryAiqResults(uint64_t frameId, cca_aiq_results_storage* results);
+     * \brief Get Aiq results.
+     *  Get Aiq results parsed from CCAStorage.
+     *
+     * \param[in] frameId               Mandatory.\n
+     *                                  Get Aiq result for frame with frameId.
+     * \param[out] results              Mandatory.\n
+     *                                  Aiq results
+     * \return                          Error code for status. zero on success, non-zero on failure
+     */
+    ia_err queryAiqResults(uint64_t frameId, cca_aiq_results_storage *results);
 
     /*!
-    * \brief Save Aiq results.
-    *  Save Aiq results to internal CCAStorage.
-    *
-    * \param[out] results              Mandatory.\n
-    *                                  Aiq results
-    * \return                          Error code for status. zero on success, non-zero on failure
-    */
+     * \brief Save Aiq results.
+     *  Save Aiq results to internal CCAStorage.
+     *
+     * \param[out] results              Mandatory.\n
+     *                                  Aiq results
+     * \return                          Error code for status. zero on success, non-zero on failure
+     */
     ia_err saveAiqResults(uint64_t frameId, const cca_aiq_results_storage &results);
 
     /*!
-    * \brief Reload new cpf data and updates ISP tuning for a specific aic id. Used for IQ simulator mid pipe injection.
-    *  Assuming that only ISP tuning has changed from previous cpf. Keeps the same tuning mode that was used before the change.
-    *  Does not reset any other Intel CCA state such as AIQ results or AIC configuration.
-    *
-    * \param[in] aiqCpf               Mandatory.\n
-    *                                  New cpf binary data.
-    * \param[in] aicId                Optional.\n
-    *                                  Aic id to update the tuning for. If not provided, assuming that there is only one aic instance.
-    * \return                          Error code for status. zero on success, non-zero on failure
-    */
-    ia_err reloadIspTuning(const cca_cpf& aiqCpf, int32_t aicId = -1);
+     * \brief Reload new cpf data and updates ISP tuning for a specific aic id. Used for IQ
+     * simulator mid pipe injection. Assuming that only ISP tuning has changed from previous cpf.
+     * Keeps the same tuning mode that was used before the change. Does not reset any other Intel
+     * CCA state such as AIQ results or AIC configuration.
+     *
+     * \param[in] aiqCpf               Mandatory.\n
+     *                                  New cpf binary data.
+     * \param[in] aicId                Optional.\n
+     *                                  Aic id to update the tuning for. If not provided, assuming
+     * that there is only one aic instance.
+     * \return                          Error code for status. zero on success, non-zero on failure
+     */
+    ia_err reloadIspTuning(const cca_cpf &aiqCpf, int32_t aicId = -1);
 
     /*!
-    *  \brief set cca log level
-    *
-    *  \param[in] log_level              Mandatory.\n
-    *                                    0: disable log
-    *                                    1: enable IA_CCA_LOG_ERROR
-    *                                    2: enable IA_CCA_LOG
-    *                                    3: enable IA_CCA_LOG & IA_CCA_LOG_ERROR
-    */
-    static void setCCALogLevel(int32_t log_level);
+     *  \brief set cca log level
+     *
+     *  \param[in] log_level              Mandatory.\n
+     *                                    0: disable log
+     *                                    1: enable IA_CCA_LOG_ERROR
+     *                                    2: enable IA_CCA_LOG
+     *                                    3: enable IA_CCA_LOG & IA_CCA_LOG_ERROR
+     */
+    static void setCCALogLevel(uint32_t log_level);
 
-protected:
-    ia_binary_data* getAiqData();
-    ia_binary_data* getIspData();
-    ia_binary_data* getOthersData();
+ protected:
+    ia_binary_data *getAiqData();
+    ia_binary_data *getIspData();
+    ia_binary_data *getOthersData();
     ia_err initCpfParse();
     void initSaResults();
-    ia_err initIspAic(const cca_stream_ids& aic_stream_ids);
+    ia_err initIspAic(const cca_stream_ids &aic_stream_ids);
     void deInitIspAic();
     ia_err initAiq();
     void deinitAiq();
     void deleteSaResultsGrids();
-    void copySaResults(const ia_aiq_sa_results_v1* saResult);
-    void initAiqb(const cca_cpf& aiqCpf);
+    void copySaResults(const ia_aiq_sa_results_v1 *saResult);
+    void initAiqb(const cca_cpf &aiqCpf);
     void deInitAiqb();
 
-protected:
-    virtual ia_err setStatsToAiq(const cca_stats_params &params, const cca_aiq_results_storage &aiqResults) = 0;
+ protected:
+    virtual ia_err setStatsToAiq(const cca_stats_params &params,
+                                 const cca_aiq_results_storage &aiqResults) = 0;
     virtual ia_err setLtmTuning(const ia_binary_data *tuning_data_ptr) = 0;
-    virtual void updateLtmResult(cca_3a_plus_results* results) = 0;
+    virtual void updateLtmResult(cca_3a_plus_results *results) = 0;
 
-    ia_err initDVS(const cca_init_params& initParams);
+    ia_err initDVS(const cca_init_params &initParams);
     void deInitDvs();
 
     ia_err initBcomp(ia_bcomp_dol_mode_t mode, float32_t ratio);
     ia_err updateBcomp();
     void deinitBcomp();
-    void runAIC_(uint64_t frameId, const cca_pal_input_params& params, cca_3a_plus_results* results);
+    void runAIC_(uint64_t frameId, const cca_pal_input_params &params,
+                 cca_3a_plus_results *results);
 
     virtual void newAic() = 0;
     virtual void deleteAic() = 0;
-    virtual ia_err initAic(const ia_binary_data *aiqb, const ia_cmc_t *cmc, uint32_t max_stats_width,
-                           uint32_t max_stats_height, uint32_t max_num_stats_in, const ia_mkn *mkn,
-                           const cca_stream_ids& aic_stream_ids) = 0;
-    virtual ia_err updateAicTuning(const ia_binary_data *aiqb, const ia_cmc_t *cmc, int32_t streamId = -1) = 0;
-    virtual ia_err getDvsStatsAic(ia_dvs_statistics* stats) = 0;
+    virtual ia_err initAic(const ia_binary_data *aiqb, const ia_cmc_t *cmc,
+                           uint32_t max_stats_width, uint32_t max_stats_height,
+                           uint32_t max_num_stats_in, const ia_mkn *mkn,
+                           const cca_stream_ids &aic_stream_ids) = 0;
+    virtual ia_err updateAicTuning(const ia_binary_data *aiqb, const ia_cmc_t *cmc,
+                                   int32_t streamId = -1) = 0;
+    virtual ia_err getDvsStatsAic(ia_dvs_statistics *stats) = 0;
 
-protected:
+ protected:
     CCAStorage *mCCAStorage;
 
     /*
      * aiqb and cmc
      */
     ia_binary_data mAiqb;
-    ia_cmc_t* mParsedCMC;
+    ia_cmc_t *mParsedCMC;
     bool mAiqbInited;
 
     /*
@@ -511,14 +535,14 @@ protected:
      * AIQ structs and params
      */
     bool mCCAIsEnabled;
-    ia_aiq* mAiqHandle;
+    ia_aiq *mAiqHandle;
     uint8_t mAECFrameDelay;
     uint64_t mFrameTimestamp;
-    ia_aiq_pa_results_v1* mPaResults;
-    ia_aiq_awb_results* mAwbResults;
-    ia_aiq_ae_results* mAeResults;
+    ia_aiq_pa_results_v1 *mPaResults;
+    ia_aiq_awb_results *mAwbResults;
+    ia_aiq_ae_results *mAeResults;
     ia_aiq_af_results *mAfResults;
-    ia_aiq_gbce_results* mGbceResults;
+    ia_aiq_gbce_results *mGbceResults;
     ia_aiq_sa_results_v1 mSaResults;
     ia_aiq_sa_results_v1 mSaFakeResults;
 
@@ -530,10 +554,11 @@ protected:
     ia_aiq_sa_input_params_v1 mSaInput;
     ia_aiq_gbce_input_params mGbceInput;
     ia_aiq_pa_input_params mPaInput;
+    ia_aiq_dsd_input_params mDsdInput;
 
     uint64_t mFrameIndex;
     uint32_t mMaxNumberOfStats;
-    ia_mkn* mMknData;
+    ia_mkn *mMknData;
     uint32_t mInitBitmap;
     cca_stream_ids mAicStreamIds;
 #ifndef ENABLE_CUSTOMIZED_STD_LIB
@@ -547,40 +572,40 @@ protected:
     /*
      * RGBS grids
      */
-    ia_aiq_grid** mCurrentIRGrid;
+    ia_aiq_grid **mCurrentIRGrid;
 
     /*
-    * Bcomp structs
-    */
-    ia_bcomp* mBcompState;
-    ia_bcomp_results* mBcompResults;
+     * Bcomp structs
+     */
+    ia_bcomp *mBcompState;
+    ia_bcomp_results *mBcompResults;
 
     /*
-    * ia_lard - a library for parsing the cpff and loading it in a dynamic way
-    */
-    ia_lard* mLard;
+     * ia_lard - a library for parsing the cpff and loading it in a dynamic way
+     */
+    ia_lard *mLard;
     cca_lard_data mLardData;
     ia_lard_input_params mLardInputParams;
 
     /*
-    * lard_result - the results which are returned after lard_run
-    */
-    ia_lard_results* mLardResult;
+     * lard_result - the results which are returned after lard_run
+     */
+    ia_lard_results *mLardResult;
 
-    IntelDVS* mIntelDVSHandles;
+    IntelDVS *mIntelDVSHandles;
 
     ia_emd_decoder_t *mEmdDecoder;
 
     uint32_t m3AResultBitmap;
 
     /*
-    * mEnableUsingLardResultToInitCCA - whether using lard result to init cca
-    */
+     * mEnableUsingLardResultToInitCCA - whether using lard result to init cca
+     */
     bool mEnableUsingLardResultToInitCCA;
 #ifdef INPUTS_IN_FILE
     cca_debug_t *mDebug = nullptr;
 #endif  // INPUTS_IN_FILE
     int8_t reserve[24];
 };
-}//cca
-#endif //INTEL_CCA_BASE_H_
+}  // namespace cca
+#endif  // INTEL_CCA_BASE_H_

@@ -1,7 +1,7 @@
 /*
  * INTEL CONFIDENTIAL
  *
- * Copyright (C) 2012-2024 Intel Corporation
+ * Copyright (C) 2012-2025 Intel Corporation
  *
  * This software and the related documents are Intel copyrighted materials,
  * and your use of them is governed by the express license under which they
@@ -142,6 +142,7 @@ typedef struct
     uint64_t frame_timestamp;                                                   /*!< Mandatory. Time stamp for captured frame. */
     ia_rectangle statistics_crop_area;                                          /*!< Mandatory. RGBS and AF grid area crop with respect to full field of view of sensor output using (relative)ranges from ia_coordinate.h. */
     float32_t stitched_stats_norm_factor;                                        /*!< Mandatory. For companded pipe usually statistivs represent more than 16bits then factor > 1 depends on highest bit represent by stat. */                                     
+    uint32_t rgbs_stats_bit_depth;                                               /*!< Mandatory. indicate the bit depth of rgbs stats */
     int32_t cropped_image_height;                                               /*!< Mandatory. Cropped RGBS raw height */
 #ifdef IA_CCAT_EXTERNAL_RGB_HISTOGRAMS_ENABLED
     ia_ccat_histograms rgb_histograms[IA_CCAT_STATISTICS_MAX_NUM];              /*!< Optional. RGB histograms pointer for each exposure statistics. */
@@ -164,6 +165,7 @@ typedef struct
 #ifdef IA_CCAT_DEPTH_GRID_ENABLED
     ia_depth_grid depth_grid;                                                   /*!< Optional. Depth grid. */
 #endif
+    ia_acs_stats acs_stats;                                                     /*!< Optional. Statistics from the ACS sensor (if avaialble) .*/
 } ia_ccat_frame_statistics;
 
 typedef struct
@@ -273,6 +275,24 @@ typedef struct {
     float confidence;                                             /* Confidence of LSE result */
 } ia_ccat_lse_results_t;
 #endif
+
+/*!
+* \brief Map data from SAP
+*/
+typedef struct
+{
+    uint32_t grid_width;
+    uint32_t grid_height;
+    uint32_t stride;
+    ia_binary_data* segmap_data;
+    ia_rectangle segmap_crop_area;
+
+    uint32_t rgbs_grid_width;
+    uint32_t rgbs_grid_height;
+    ia_rectangle rgbs_crop_area;
+
+    uint64_t frame_id;
+}ia_aiq_segmap_input_params;
 
 #if 0
 /*!
