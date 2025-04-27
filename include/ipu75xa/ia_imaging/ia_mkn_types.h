@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2022 Intel Corporation
+ * Copyright 2012-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,6 +115,17 @@ typedef enum
     ia_mkn_dnid_free_records = 768,         /*!< Next free block of records - replace this when assigned. */
     ia_mkn_dnid_last                        /*!< Total number of data names, keep this enum member as a last one!. */
 } ia_mkn_dnid;
+
+/*!
+ * \brief Data Name ID (DNID) enumeration for cca_flow library.
+ *  Range is 245 - 255. Data Name ID less than 245 defined in ia_aiq_mkn_dnid enum in ia_aiq_mkn_records.h
+ *  Data Name ID from 256 defined in ia_mkn_dnid enum in this file
+ */
+typedef enum
+{
+    ia_mkn_dnid_AWB_Results_Manual = 245,   /*!< Used for saving Override AWB values */
+    ia_mkn_dnid_cca_flow_records_last       /*!< Total number of data names, keep this enum member as a last one!. */
+} ia_mkn_dnid_cca_flow_records;
 
 
 /*!

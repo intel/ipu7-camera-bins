@@ -33,6 +33,13 @@ typedef struct
     unsigned char gb;
 } ia_color_channels;
 
+typedef struct
+{
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+} ia_color_3channels;
+
 /*!
  * \brief Statistics grid with averaged RGBS color channels and saturation percentage.
  * Total size of each color channel array is defined by width * height of the grid.
