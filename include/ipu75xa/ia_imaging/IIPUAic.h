@@ -56,14 +56,20 @@ typedef struct {
 /*!
  * \brief Configuration for the kernels in the entire pipeline for AIC.
  */
-typedef struct {
+struct cca_aic_config {
     uint32_t cb_num; /*!< Number of cb. */
 #ifdef ENABLE_STL_LIB
     std::vector<cca_cb_config> cb_config; /*!< Vector of cb configurations. */
 #else
     cca_cb_config cb_config[MAX_PG_NUM]; /*!< Array of cb configurations. */
 #endif
-} cca_aic_config;
+
+    cca_aic_config() : cb_num(0) {
+#ifndef ENABLE_STL_LIB
+        IA_MEMSET(cb_config, 0, MAX_PG_NUM * sizeof(cca_cb_config));
+#endif
+    }
+};
 
 /*!
  * \brief Structure for terminal buffer.
