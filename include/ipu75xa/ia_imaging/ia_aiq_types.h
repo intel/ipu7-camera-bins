@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2024 Intel Corporation
+ * Copyright 2012-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -283,7 +283,7 @@ typedef enum
     ia_aiq_bracket_mode_hdr  = (1U << 1U),   /*!< High Dynamic Range bracketing used. */
     ia_aiq_bracket_mode_ull_auto_switch = (1U << 2U),   /*!< 1C (0) 4C (1) auto switch indication. */
     ia_aiq_bracket_mode_shdr_ldr_switch = (1U << 3U),    /*!< shdr S and L (0) ldr long only (1) - for DOL */
-    ia_aiq_bracket_mode_vai_mode = (1U << 4U)    /*!< Vai mode enable – (0) regular mode (1) Vai mode*/
+    ia_aiq_bracket_mode_vai_mode = (1U << 4U)    /*!< Vai mode enable (0) regular mode (1) Vai mode*/
 } ia_aiq_bracket_mode;
 
 /*!
@@ -702,6 +702,7 @@ typedef struct
     float final_b_per_g;              /*!< Final White Point, including color appearance modeling.*/
     unsigned int cct_estimate;        /*!< Correlated Color Temperature estimate calculated from the accurate WP. */
     float distance_from_convergence;  /*!< Range [0.0f, 1.0f]. Distance from convergence. Value 0.0f means converged. */
+    float acs_usage;                  /*!< Indicates the weight give to ACS WP calculation (supported systems only) */
 } ia_aiq_awb_results;
 
 /*!

@@ -591,6 +591,18 @@ typedef struct
  */
 typedef struct
 {
+    cie_coords_t cie_coords;                /*!< Light source CIE xy coordinates As measured by external light meter. */
+    chromaticity_t chromaticity_response;   /*!< Avg Chromaticity response for R/G anf B/G.*/
+    cie_coords_t acs_cie_coords;            /*!< Light source CIE xy coordinates As measured by ACS sensor. */
+    uint32_t acs_cct;                       /*!< CCT as measured by ACS sensor. */
+} cmc_lightsource_acs_extension_t;
+#define SIZEOF_CMC_LIGHTSOURCE_ACS_EXTENSION_T 16U
+
+/*!
+ * \brief CMC Chromaticity Response
+ */
+typedef struct
+{
     ia_mkn_record_header header;      /*!< Record header with Format ID: UInt16 (See AIQB_DataID), Name ID: cmc_name_id_chromaticity_response (See cmc_name_id). */
     uint16_t num_lightsources;        /*!< Number of avg light sources. */
     uint16_t num_nvm_lightsources;    /*!< Number of nvm light sources. */
@@ -904,6 +916,18 @@ typedef struct
 #define SIZEOF_CMC_CHROMATICITY_RESPONSE_V101 2U
 
 /*!
+ * \brief extenstion to cmc_chromaticity_response_t to also include ACS data
+ */
+typedef struct
+{
+    cmc_lightsource_acs_extension_t* cmc_lightsources_avg;
+    cmc_lightsource_acs_extension_t* cmc_lightsources_hi;
+    cmc_lightsource_acs_extension_t* cmc_lightsources_lo;
+    cmc_lightsource_acs_extension_t* cmc_lightsources_nvm;
+} cmc_chromaticity_response_v102_t;
+#define SIZEOF_CMC_CHROMATICITY_RESPONSE_V102 32U
+
+/*!
  * \brief Parametric model coefficients for the average chromaticity locus and CCT curve
  */
 typedef struct
@@ -915,7 +939,8 @@ typedef struct
 typedef struct
 {
     cmc_chromaticity_response_t *cmc_chromaticity_response;
-    cmc_chromaticity_response_v101_t *cmc_chromaticity_response_v101;
+    cmc_chromaticity_response_v101_t* cmc_chromaticity_response_v101;
+    cmc_chromaticity_response_v102_t* cmc_chromaticity_response_with_acs;
     cmc_locus_t *cmc_locus;
     cmc_lightsource_t *cmc_lightsources_avg;
     cmc_lightsource_t *cmc_lightsources_hi;

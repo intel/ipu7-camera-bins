@@ -119,6 +119,7 @@ typedef enum
 {
     ia_pal_uuid_system_api_acm_1_2 = 36320,
     ia_pal_uuid_system_api_aestatistics_2_1 = 6191,
+    ia_pal_uuid_system_api_b2i_ds_1_1 = 2102,
     ia_pal_uuid_system_api_bnlm_3_3 = 5901,
     ia_pal_uuid_system_api_bxt_blc = 12306,
     ia_pal_uuid_system_api_ccm_3a_2_0 = 37617,

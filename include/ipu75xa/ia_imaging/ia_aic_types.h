@@ -147,6 +147,7 @@ struct IaAicInputParams
                                                                      calculations are done based on tunable run rate for each ISP configuration algorithm. */
     ia_dvs_image_transformation *gdcTransformation; /*!< Mandatory. Image transformation parameters for GDC5 ISP FW. This feature replaces the need for morph_table usage.*/
     ia_media_format mediaFormat;                    /*!< Mandatory. Selected Digital television output format.(e.g. BT709) */
+    int32_t ptz_zoom_active;
 
     /* Optional parameters */
     char manualBrightness;                          /*!< Optional. Manual brightness value range [-128,127]. Value 0 means no change. */
