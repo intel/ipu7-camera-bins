@@ -99,7 +99,7 @@ typedef enum
     ia_pal_uuid_isp_pext_1_0 = 43213,
     ia_pal_uuid_isp_rgb_ir_2_0 = 14488,
     ia_pal_uuid_isp_rgbs_grid_1_1 = 15021,
-    ia_pal_uuid_isp_tm_app = 40423,
+    ia_pal_uuid_isp_tm_app = 37003,
     ia_pal_uuid_isp_tnr_scale_lb = 33723,
     ia_pal_uuid_isp_tnr_scale_fp = 60056,
     ia_pal_uuid_isp_tnr7_bc_1_1 = 54840,
@@ -120,6 +120,7 @@ typedef enum
 {
     ia_pal_uuid_system_api_acm_1_2 = 36320,
     ia_pal_uuid_system_api_aestatistics_2_1 = 6191,
+    ia_pal_uuid_system_api_b2i_ds_1_1 = 2102,
     ia_pal_uuid_system_api_bnlm_3_3 = 5901,
     ia_pal_uuid_system_api_bxt_blc = 12306,
     ia_pal_uuid_system_api_ccm_3a_2_0 = 37617,

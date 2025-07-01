@@ -303,6 +303,8 @@ typedef struct {
     float32_t final_b_per_g; /*!< Final White Point, including color appearance modeling. */
     uint32_t cct_estimate; /*!< Correlated Color Temperature estimate calculated from the accurate WP. */
     float32_t distance_from_convergence; /*!< Distance from convergence. Value 0.0f means converged. */
+    float acs_usage; /*!< Indicates the acs weight for White Point calculation, along with the weights
+                          for greyworld, RGB, and other factors. (supported systems only) */
 } cca_awb_results;
 
 /*!
@@ -598,6 +600,7 @@ typedef struct {
     uint64_t timestamp; /*!< Mandatory. Current timestamp (in microseconds) when ia_isp_bxt_run function is called. */
     uint64_t seq_id; /*!< Optional. Sequence number for AIC run. */
     uint32_t dvs_id; /*!< Optional. Sequence number for DVS. */
+    int32_t ptz_zoom_active; /*!< Optional. b2i_DS need the parameter for calclate kernel_width. */
     ia_isp_feature_setting nr_setting; /*!< Mandatory. Feature setting for noise reduction algorithms. */
     ia_isp_feature_setting ee_setting; /*!< Mandatory. Feature setting for edge enhancement algorithms. */
     int8_t manual_brightness; /*!< Optional. Manual brightness value range [-128,127]. */
