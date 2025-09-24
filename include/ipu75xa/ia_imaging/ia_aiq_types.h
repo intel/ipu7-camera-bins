@@ -369,6 +369,7 @@ typedef struct {
     ia_aiq_ae_feature_setting red_eye_reduction_flash;      /*!< AEC will propose flashes before pre-flashes to reduce red eye effect. */
     ia_aiq_ae_feature_setting fill_in_flash;                /*!< AEC will propose flash in back light situations, where target is close enough. */
     ia_aiq_ae_feature_setting continuous_flicker_detection; /*!< AEC runs the flicker detection algorithm continuously in the VF */
+    ia_aiq_ae_feature_setting flicker_detection_v2;         /*!< AEC will run the new flicker detection algorithm */
 } ia_aiq_ae_features;
 
 

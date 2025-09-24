@@ -1,6 +1,6 @@
 /*
  * INTEL CONFIDENTIAL
- * Copyright (c) 2012-2022 Intel Corporation
+ * Copyright (c) 2012-2025 Intel Corporation
  * All Rights Reserved.
  *
  * The source code contained or described herein and all documents related to
@@ -128,8 +128,8 @@ typedef struct
     uint8_t vcm_bits;                                 /*!< VCM register bit depth (8 or 16). */
     int16_t *vcm_af_near;                             /*!< VCM register values for n_pos for AF at near calibration distance (supplier specific). */
     int16_t *vcm_af_far;                              /*!< VCM register values for n_pos for AF at far calibration distance (supplier specific). */
-    int16_t *vcm_af_start;                            /*!< VCM register values for n_pos for AF at lens start.DEPRICATED.the parameter must not be used */
-    int16_t *vcm_af_end;                              /*!< VCM register values for n_pos for AF at lens end.DEPRICATED the parameter must not be used */
+    int16_t *vcm_af_start;                            /*!< VCM register values for n_pos for AF at lens start.DEPRECATED.the parameter must not be used */
+    int16_t *vcm_af_end;                              /*!< VCM register values for n_pos for AF at lens end.DEPRECATED the parameter must not be used */
     uint8_t n_lights;                                 /*!< Number of light sources used for LSC and AWB. */
     uint8_t *cie_coords_x;                            /*!< CIE x coordinates for n_lights light sources. */
     uint8_t *cie_coords_y;                            /*!< CIE y coordinates for n_lights light sources. */

@@ -57,11 +57,23 @@ enum IaAicBufferTypes
     iaAicBufferTypeNotSet
 };
 
+struct IaAicUpscalerFragDesc
+{
+    uint16_t fragmentInputCropLeft;       /*!< The amount of pixels to crop on the left before upscaling. */
+    uint16_t fragmentInputCropRight;      /*!< The amount of pixels to crop on the right before upscaling. */
+};
+
 struct IaAicFragmentDesc //must be aligned with: ia_pac_fragment_desc in ia_pac_frag_types
 {
     uint16_t fragmentInputWidth;   /*!< The input width of the fragment. */
     uint16_t fragmentOutputWidth;  /*!< The output width of the fragment. */
     uint16_t fragmentStartX;       /*!< The x offset from the top-left corner of the full image. */
+
+    // Kernel specific additions
+    union
+    {
+        IaAicUpscalerFragDesc upscalerFragDesc;
+    };                     /*!< Extended fragment description. */
 };
 
 
@@ -92,7 +104,7 @@ struct IaBinaryData
 struct ImagingKernelFormatInfo
  {
     uint32_t inputFormat;  /*!< FourCC of format in input edge of the kernel
-                                (can be used to retrieve full format descrition from ISP format bridge */
+                                (can be used to retrieve full format description from ISP format bridge */
     uint32_t outputFormat; /*!< FourCC of format in output edge of the kernel */
  };
 
@@ -148,6 +160,7 @@ struct IaAicInputParams
     ia_dvs_image_transformation *gdcTransformation; /*!< Mandatory. Image transformation parameters for GDC5 ISP FW. This feature replaces the need for morph_table usage.*/
     ia_media_format mediaFormat;                    /*!< Mandatory. Selected Digital television output format.(e.g. BT709) */
     int32_t ptz_zoom_active;
+    float32_t zoom_factor;                          /*!< Mandatory. Zoom factor for zoom mode. If ptz_zoom_active is false, zoom_factor is 1.0. */
 
     /* Optional parameters */
     char manualBrightness;                          /*!< Optional. Manual brightness value range [-128,127]. Value 0 means no change. */
@@ -177,7 +190,7 @@ typedef ia_ccat_frame_statistics IaCcatStatistics;
 typedef uint32_t IaAicStructuralParameter;
 
 // ==========================================================================
-// Depricated interface
+// Deprecated interface
 // ==========================================================================
 
 typedef class IaAic ia_aic_ctx_t;

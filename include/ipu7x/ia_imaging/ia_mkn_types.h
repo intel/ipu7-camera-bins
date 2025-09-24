@@ -54,7 +54,7 @@ typedef void ia_mkn;
 /*!
  *  Start of MKN System enumeration set.
  * \brief Enumerations set for Maker Note System.
- * This part contatins two enumerations:
+ * This part contains two enumerations:
  * - 'ia_mkn_dfid', describes data type of the 'Data' field in the MKN record;
  * - 'ia_mkn_dnid',describes a name (or functionality) of data in the 'Data' field.
  * To modify this file a following procedure is used:

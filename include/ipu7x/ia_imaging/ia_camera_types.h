@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Intel Corporation
+ * Copyright 2023-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ typedef struct {
 typedef struct {
     float32_t rlut[IA_CAMERA_PARAMETERS_RADIAL_DISTORTION_LUT_SIZE_MAX]; //the rgb_rlut calibration table
 
-    ia_rectify_sensor_t calib_sensor; //the "input" part in the RGB calibratoin table
+    ia_rectify_sensor_t calib_sensor; //the "input" part in the RGB calibration table
 
     ia_rectify_calib_t calib_rectified; //the "rectified" part in the RGB calibration table
 

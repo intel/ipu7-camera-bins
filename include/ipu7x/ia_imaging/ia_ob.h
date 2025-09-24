@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 Intel Corporation
+ * Copyright 2017-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ typedef struct {
     float cc01;
     float cc10;
     float cc11;
-} ia_ob_output;                 /*!< OB ouput for 4 color components */
+} ia_ob_output;                 /*!< OB output for 4 color components */
 
 LIBEXPORT ia_ob*
 ia_ob_init(void);

@@ -64,7 +64,7 @@ typedef struct
 } ia_filter_response;
 
 /*!
- * \brief Convolution filter respose statistics
+ * \brief Convolution filter response statistics
  * As defined in the AIQ statistics specification.
  */
 typedef struct

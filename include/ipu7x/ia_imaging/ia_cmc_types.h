@@ -103,7 +103,7 @@ typedef struct
 */
 typedef struct
 {
-    float matrix[3][3];                 /*!< 3x3 accurate CCM, each consequtive elements sum to 1. */
+    float matrix[3][3];                 /*!< 3x3 accurate CCM, each consecutive elements sum to 1. */
 } cmc_color_matrix;
 
 /*!
@@ -162,7 +162,8 @@ typedef enum
 {
     cmc_nvm_interpolation_polynomial,
     cmc_nvm_interpolation_bi_cubic,
-    cmc_nvm_interpolation_polynomial_crop_two_pixels
+    cmc_nvm_interpolation_polynomial_crop_two_pixels,
+    cmc_nvm_interpolation_polynomial_with_valid_area
 } cmc_nvm_interpolation;
 
 
@@ -581,13 +582,13 @@ typedef struct
  */
 typedef struct
 {
-    cie_coords_t cie_coords;           /*!< Light source CIE xy coordinates. */
-    chromaticity_t chromaticity_response; /*!< Avg Chromaticity response for R/G anf B/G.*/
+    cie_coords_t cie_coords;                /*!< Light source CIE xy coordinates. */
+    chromaticity_t chromaticity_response;   /*!< Avg Chromaticity response for R/G anf B/G.*/
 } cmc_lightsource_t;
 #define SIZEOF_CMC_LIGHTSOURCE_T 8U
 
 /*!
- * \brief CMC Chromaticity Response
+ * \brief ACS Lightsource definition.
  */
 typedef struct
 {
@@ -636,8 +637,8 @@ typedef struct
     cmc_light_source light_src_type; /*!< Light-source type. See enum cmc_light_source.  */
     chromaticity_t chromaticity;     /*!< Chromaticity (sensor) in R/G, B/G plane. */
     cie_coords_t cie_coords;      /*!< CIE x and y coordinates. */
-    int32_t matrix_accurate[9];   /*!< 3x3 accurate CCM, each 3 consequtive elemets sum to 1. */
-    int32_t matrix_preferred[9];  /*!< 3x3 preferred CCM, each 3 consequtive elemets sum to 1. */
+    int32_t matrix_accurate[9];   /*!< 3x3 accurate CCM, each 3 consecutive elements sum to 1. */
+    int32_t matrix_preferred[9];  /*!< 3x3 preferred CCM, each 3 consecutive elements sum to 1. */
 } cmc_color_matrix_t;
 #define SIZEOF_CMC_COLOR_MATRIX_T 84U
 
@@ -920,12 +921,10 @@ typedef struct
  */
 typedef struct
 {
-    cmc_lightsource_acs_extension_t* cmc_lightsources_avg;
-    cmc_lightsource_acs_extension_t* cmc_lightsources_hi;
-    cmc_lightsource_acs_extension_t* cmc_lightsources_lo;
-    cmc_lightsource_acs_extension_t* cmc_lightsources_nvm;
+    uint8_t enable_acs;                                        /*!< Is ACS data valid. */
+    cmc_lightsource_acs_extension_t* cmc_lightsources_acs_avg;  /*!< Average light sources with ACS data. */
 } cmc_chromaticity_response_v102_t;
-#define SIZEOF_CMC_CHROMATICITY_RESPONSE_V102 32U
+#define SIZEOF_CMC_CHROMATICITY_RESPONSE_V102 1U
 
 /*!
  * \brief Parametric model coefficients for the average chromaticity locus and CCT curve
@@ -1194,7 +1193,7 @@ typedef struct
  */
 typedef struct
 {
-    float color_matrix[9];                 /*!< 3x3 accurate CCM, each consequtive elements sum to 1. */
+    float color_matrix[9];                 /*!< 3x3 accurate CCM, each consecutive elements sum to 1. */
 } cmc_acm_color_matrix_t;
 #define SIZEOF_CMC_ACM_COLOR_MATRIX_T 36U
 

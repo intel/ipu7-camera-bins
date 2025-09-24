@@ -141,7 +141,7 @@ typedef struct
     uint64_t frame_id;                                                          /*!< Mandatory. ID for the captured frame. */
     uint64_t frame_timestamp;                                                   /*!< Mandatory. Time stamp for captured frame. */
     ia_rectangle statistics_crop_area;                                          /*!< Mandatory. RGBS and AF grid area crop with respect to full field of view of sensor output using (relative)ranges from ia_coordinate.h. */
-    float32_t stitched_stats_norm_factor;                                        /*!< Mandatory. For companded pipe usually statistivs represent more than 16bits then factor > 1 depends on highest bit represent by stat. */                                     
+    float32_t stitched_stats_norm_factor;                                        /*!< Mandatory. For companded pipe usually statistivs represent more than 16bits then factor > 1 depends on highest bit represent by stat. */
     uint32_t rgbs_stats_bit_depth;                                               /*!< Mandatory. indicate the bit depth of rgbs stats */
     int32_t cropped_image_height;                                               /*!< Mandatory. Cropped RGBS raw height */
 #ifdef IA_CCAT_EXTERNAL_RGB_HISTOGRAMS_ENABLED
@@ -165,7 +165,7 @@ typedef struct
 #ifdef IA_CCAT_DEPTH_GRID_ENABLED
     ia_depth_grid depth_grid;                                                   /*!< Optional. Depth grid. */
 #endif
-    ia_acs_stats acs_stats;                                                     /*!< Optional. Statistics from the ACS sensor (if avaialble) .*/
+    ia_acs_stats acs_stats;                                                     /*!< Optional. Statistics from the ACS sensor (if available) .*/
 } ia_ccat_frame_statistics;
 
 typedef struct
@@ -256,7 +256,7 @@ typedef enum
     ccat_project_adaption_bitmap_3 = 1 << 3,   /*!< is for vcx */
     ccat_project_adaption_bitmap_4 = 1 << 4,   /*!< is for AF document mode in IPU6 */
     ccat_project_adaption_bitmap_5 = 1 << 5,   /*!< is for MSFT OV02C10 NVM issue */
-    ccat_project_adaption_bitmap_6 = 1 << 6,   /*!< is for flicker v2 mode */
+    ccat_project_adaption_bitmap_6 = 1 << 6,   /*!< TBD */
     ccat_project_adaption_bitmap_7 = 1 << 7,   /*!< TBD */
     ccat_project_adaption_bitmap_8 = 1 << 8,   /*!< TBD */
     ccat_project_adaption_bitmap_9 = 1 << 9,   /*!< TBD */

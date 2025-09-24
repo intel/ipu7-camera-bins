@@ -222,7 +222,7 @@ ia_aiq_set_tuning(ia_aiq *ia_aiq_ptr,
 
 /*!
  * \brief De-initialize IA_AIQ and its submodules.
- * All memory allocated by AIQ algoriths are freed. AIQ handle can no longer be used.
+ * All memory allocated by AIQ algorithms are freed. AIQ handle can no longer be used.
  *
  * \param[in] ia_aiq_ptr            Mandatory.\n
  *                                  AIQ instance handle.

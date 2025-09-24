@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 Intel Corporation
+ * Copyright 2017-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,7 +160,7 @@ typedef struct
     ia_view_projection_type_t type; /*!< type: Projection type to be used*/
     double scale_factor_1[2];   /*!< scale_factor_1: Internal scale factor calculated*/
     double scale_factor_2[2];   /*!< scale_factor_2: Internal scale factor calculated*/
-    double inv_f_pi;            /*!< inv_f_pi is inverse focal lenght pi: Internal parameter*/
+    double inv_f_pi;            /*!< inv_f_pi is inverse focal length pi: Internal parameter*/
     double bowl_radius_sqr;
     double bowl_scale;
 } ia_view_projection_t;
@@ -175,7 +175,7 @@ typedef struct
     /*!< Projections the view */
     ia_view_projection_t projection;
 
-    /*!< Pre Affine Matrix: Window rotatoin and scale*/
+    /*!< Pre Affine Matrix: Window rotation and scale*/
     float pre_affine_scale_matrix[2][2];
 
     /*!< Pre Affine Matrix: Translation*/
