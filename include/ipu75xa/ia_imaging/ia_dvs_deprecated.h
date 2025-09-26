@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 Intel Corporation
+ * Copyright 2014-2025 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ typedef struct
                                                      This allows DVS to generate morphing table which points are outside of the image area
                                                      but still inside GDC buffer (padding area). This might be the case e.g. if LDC grid is
                                                      barrel shaped. */
-    ia_dvs_crop_params crop_params;             /**< Sensor and ISP cropping parameteres in native resolution (without any scaling or binning).
+    ia_dvs_crop_params crop_params;             /**< Sensor and ISP cropping parameters in native resolution (without any scaling or binning).
                                                      If scaling is performed before cropping, cropping offsets need to be calculated in native
                                                      resolution. Also if cropping is done in multiple places, everything needs to be combined
                                                      together.

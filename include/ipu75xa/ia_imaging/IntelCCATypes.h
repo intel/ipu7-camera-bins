@@ -381,6 +381,7 @@ typedef struct {
     bool bAssitLightOn; /*!< Flag indicating if the AF assist light is on. */
     uint8_t AECFrameDelay; /*!< Frame delay for auto exposure to take effect. */
     bool hasEmbeddedData; /*!< Flag indicating if embedded data is available. */
+    ia_acs_stats acs_stats; /*acs parameters*/
 } cca_stats_params;
 
 /*!
@@ -601,6 +602,7 @@ typedef struct {
     uint64_t seq_id; /*!< Optional. Sequence number for AIC run. */
     uint32_t dvs_id; /*!< Optional. Sequence number for DVS. */
     int32_t ptz_zoom_active; /*!< Optional. b2i_DS need the parameter for calclate kernel_width. */
+    float32_t zoom_factor;   /*!< Optional. zoom factor. */
     ia_isp_feature_setting nr_setting; /*!< Mandatory. Feature setting for noise reduction algorithms. */
     ia_isp_feature_setting ee_setting; /*!< Mandatory. Feature setting for edge enhancement algorithms. */
     int8_t manual_brightness; /*!< Optional. Manual brightness value range [-128,127]. */

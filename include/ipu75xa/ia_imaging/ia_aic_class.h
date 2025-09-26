@@ -1,7 +1,7 @@
 /*
  * INTEL CONFIDENTIAL
  *
- * Copyright (C) 2018-2024 Intel Corporation
+ * Copyright (C) 2018-2025 Intel Corporation
  *
  * This software and the related documents are Intel copyrighted materials,
  * and your use of them is governed by the express license under which they
@@ -202,7 +202,7 @@ class LIBEXPORT IaAic
      *
      * \param [in] group_id         unique identifier for this group of kernels in this context
      * \param [in] terminal_index   index to terminal
-     * \param [in] target           Pointer to buffer desciptor where this function stores the buffer information
+     * \param [in] target           Pointer to buffer descriptor where this function stores the buffer information
      * \param [in] fragment_index in case of striping, indicates the current stripe index that we get buffer for. In case striping is not supported for this specific buffer or at all, 0 should be used
      *
      * return ia_err_none in success. Errorcode on failure

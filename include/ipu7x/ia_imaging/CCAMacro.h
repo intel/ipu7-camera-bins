@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2024 Intel Corporation.
+ * Copyright (C) 2021-2025 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ namespace cca {
 /*
  * TODO:
  * This config file should be generated automatically to support different
- * platforms or products, because the below defintions should depend on
+ * platforms or products, because the below definitions should depend on
  * sensor, IPU, etc.
  */
 /**
