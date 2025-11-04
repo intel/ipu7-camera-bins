@@ -318,6 +318,9 @@ typedef struct {
     gtm_glare_detection_type glare_detect_type; /*!< Glare detection type. */
     uint32_t lux_level_sensors[2]; /*!< Sensor lux level based glare detection. */
     float32_t manual_gamma; /*!< Manual gamma for GTM. */
+#ifdef _WIN32
+    bool cphdr_mode; /*!< Flag indicating if adtm not run WDR in still cpHDR case */
+#endif
 } cca_gbce_input_params;
 
 /*!

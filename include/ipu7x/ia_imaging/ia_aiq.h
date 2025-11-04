@@ -442,6 +442,9 @@ typedef struct
     bool athena_mode;                       /*!< Optional. This flag is used to indicate whethe athena mode is enabled in ful_gtm algo*/
     gtm_glare_detection_type glare_detect_type; /*!< Optional. Glare detection. */
     uint32_t lux_level_sensors[2];              /*!< Optional. Sensor lux level based glare detection. */
+#ifdef _WIN32
+    bool cphdr_mode;
+#endif
 } ia_aiq_gbce_input_params;
 
 /*!
