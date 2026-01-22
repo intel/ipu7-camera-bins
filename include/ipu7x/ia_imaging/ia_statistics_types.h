@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2025 Intel Corporation
+ * Copyright 2018-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,7 +130,14 @@ typedef struct
 {
     unsigned int grid_width;                             /*!< Mandatory. Width of segmap grids. */
     unsigned int grid_height;                            /*!< Mandatory. Height of segmap grids. */
-    unsigned char class_id_conf[IA_RGBS_GRID_SIZE];           /*!< Mandatory. Class id and Confidence level data. [0, 15]. */
+    unsigned char class_id_conf[IA_RGBS_GRID_SIZE];      /*!< Mandatory. Packed byte structure for efficient storage:
+                                                              * ┌─────────────┬─────────────┐
+                                                              * │ High 4 bits │ Low 4 bits  │
+                                                              * │  Class ID   │ Confidence  │
+                                                              * │   [0-15]    │   [0-15]    │
+                                                              * └─────────────┴─────────────┘
+                                                              * Extract class_id: (class_id_conf >> 4)
+                                                              * Extract confidence: (class_id_conf & 0xF) */
     uint64_t frame_id;
 } ia_segmap_grid;
 

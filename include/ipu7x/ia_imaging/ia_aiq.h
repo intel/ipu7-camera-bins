@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2025 Intel Corporation
+ * Copyright 2012-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -662,6 +662,7 @@ ia_aiq_sensor_events_set_v2(ia_aiq *a_ia_aiq_ptr,
  */
 LIBEXPORT ia_err
 ia_aiq_segmap_decode(
+    ia_aiq *a_ia_aiq_ptr,
     const ia_aiq_segmap_input_params* segmap_input,
     ia_segmap_grid* segmap_grid_ptr);
 
