@@ -3568,6 +3568,8 @@ typedef struct
 {
     /*!< is_striping indicate if it is ipu8 and above*/
     uint8_t is_striping;
+    /*!< scaling_ratio fixed point U5.16  0 -no zoom so ds_ratio calculate in pal , bigger than 0 - using ds_ratio from system_api form static graph*/
+    int32_t scaling_ratio;
 
 } ia_pal_system_api_b2i_ds_1_1_t;
 
