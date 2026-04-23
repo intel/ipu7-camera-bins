@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 Intel Corporation
+ * Copyright 2021-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1569,6 +1569,7 @@ typedef struct
 
 #define SEG_NET_VERSION_SIZE   3U
 #define SEG_NET_CRC_CODE_SIZE   128U
+#define SEG_NET_MAX_SEGMENTS   16U
 
 typedef struct
 {
@@ -1576,6 +1577,11 @@ typedef struct
     seg_net_type seg_net_type;
     uint16_t seg_net_file_version[SEG_NET_VERSION_SIZE];
     uint8_t seg_net_checksum[SEG_NET_CRC_CODE_SIZE];
+    int8_t internal_segments_mapping[SEG_NET_MAX_SEGMENTS];
+    uint8_t seg_net_num_of_features;
+    uint8_t *seg_net_features;
+    uint8_t enable_statistics_output;
+
 
 } seg_net_info_t;
 

@@ -1,7 +1,7 @@
 /*
  * INTEL CONFIDENTIAL
  *
- * Copyright (C) 2012-2025 Intel Corporation
+ * Copyright (C) 2012-2026 Intel Corporation
  *
  * This software and the related documents are Intel copyrighted materials,
  * and your use of them is governed by the express license under which they
@@ -258,7 +258,7 @@ typedef enum
     ccat_project_adaption_bitmap_5 = 1 << 5,   /*!< is for MSFT OV02C10 NVM issue */
     ccat_project_adaption_bitmap_6 = 1 << 6,   /*!< is for wfov skin tone alignment */
     ccat_project_adaption_bitmap_7 = 1 << 7,   /*!< is CAF fine-search bitmap on - if on use CAF to perform fine search after PDAF */
-    ccat_project_adaption_bitmap_8 = 1 << 8,   /*!< TBD */
+    ccat_project_adaption_bitmap_8 = 1 << 8,   /*!< is to skip the logic that sets stable face signal when MSFT is updated. */
     ccat_project_adaption_bitmap_9 = 1 << 9,   /*!< TBD */
     ccat_project_adaption_bitmap_10 = 1 << 10,   /*!< TBD */
     ccat_project_adaption_bitmap_11 = 1 << 11,   /*!< TBD */
@@ -279,6 +279,7 @@ typedef struct {
 /*!
 * \brief Map data from SAP
 */
+#ifdef IA_CCAT_EXTERNAL_SEGMAP_ENABLED
 typedef struct
 {
     uint32_t grid_width;
@@ -286,14 +287,53 @@ typedef struct
     uint32_t stride;
     ia_binary_data* segmap_data;
     ia_rectangle segmap_crop_area;
-
     uint32_t rgbs_grid_width;
     uint32_t rgbs_grid_height;
     ia_rectangle rgbs_crop_area;
-
     uint64_t frame_id;
 }ia_aiq_segmap_input_params;
 
+/* supported features of the SAP network
+ * 3A code need to check the existence of STATS
+ * feature, then all the below segments my appear
+ * in the input segment map
+*/  
+typedef enum
+{
+    BASIC = 0,
+    MEMORY = 1,
+    STATS = 2,
+    FACE = 3
+} AlgoSapSuportedFeatures;
+
+/* available segments of STATS segment map to be used
+ * for mapping between class_code from the segmap to 
+ * Known segment from the below list
+*/  
+typedef enum
+{
+    BACKGROUND = 0,
+    FACIAL_SKIN = 1,
+    FOLIAGE = 2,
+    SKIN = 3,
+    FACIAL_HAIR = 4,
+    SKY = 5,
+    CLOTH = 6,
+    HAIR = 7,
+    OBJECTS = 8,
+    NOT_VALID_CLASS_CODE = -1
+} SegmentsNumbersMapping;
+
+typedef struct {
+    bool isEnabled;
+    uint8_t num_of_class_codes;
+    int8_t class_code_segments_mapping[SEG_NET_MAX_SEGMENTS];
+} ia_ccat_3a_segmap_info;
+#define SEGMAP_CLASS_ID_CONF_TO_CLASS_ID(class_id_conf) ((class_id_conf & 0xf0) >> 4)
+#define SEGMAP_CLASS_ID_CONF_TO_CONF(class_id_conf) ((class_id_conf & 0xf))
+#define SEGMAP_CLASS_ID_CONF_TO_SEGMENT_CONF(segment, class_id_conf) (((segment) << 4) | (class_id_conf & 0x0f))
+#define SEGMAP_AND_CONF_TO_SEGMENT_CONF(segment, conf) (((segment) << 4) | conf)
+#endif
 #if 0
 /*!
  * \brief Face rectangle
