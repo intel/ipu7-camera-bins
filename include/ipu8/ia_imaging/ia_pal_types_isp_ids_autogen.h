@@ -39,6 +39,7 @@ typedef enum
 {
     ia_pal_uuid_isp_acm_1_2 = 17531,
     ia_pal_uuid_isp_aestatistics_2_1 = 55073,
+    ia_pal_uuid_isp_ainr = 57271,
     ia_pal_uuid_isp_b2b = 17306,
     ia_pal_uuid_isp_b2i_ds_1_1 = 40299,
     ia_pal_uuid_isp_b2i_ds_output_1_1 = 50136,
@@ -63,6 +64,7 @@ typedef enum
     ia_pal_uuid_isp_glim_2_0 = 36029,
     ia_pal_uuid_isp_gltm_2_0 = 54721,
     ia_pal_uuid_isp_gmv_statistics_1_1 = 40280,
+    ia_pal_uuid_isp_imv = 23692,
     ia_pal_uuid_isp_is_odr_a = 11470,
     ia_pal_uuid_isp_is_odr_b = 55449,
     ia_pal_uuid_isp_is_odr_c = 50407,
@@ -108,6 +110,7 @@ typedef enum
     ia_pal_uuid_isp_nntm_1_2 = 8034,
     ia_pal_uuid_isp_pafstatistics_1_2 = 44308,
     ia_pal_uuid_isp_pext_1_0 = 43213,
+    ia_pal_uuid_isp_remosaic_1_0 = 8198,
     ia_pal_uuid_isp_rgb_ir_2_0 = 14488,
     ia_pal_uuid_isp_rgbs_grid_1_1 = 15021,
     ia_pal_uuid_isp_smurf_bnlm_1_0 = 54924,

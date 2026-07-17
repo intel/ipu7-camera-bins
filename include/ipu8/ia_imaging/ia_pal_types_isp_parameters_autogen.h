@@ -192,6 +192,18 @@ typedef struct
 
 } ia_pal_isp_aestatistics_2_1_t;
 
+/*! \isp struct ainr
+
+*/
+typedef struct
+{
+    /*!< width width*/
+    int32_t width;
+    /*!< height height*/
+    int32_t height;
+
+} ia_pal_isp_ainr_t;
+
 /*! \isp struct b2b
 
 */
@@ -1528,6 +1540,28 @@ typedef struct
 
 } ia_pal_isp_gmv_statistics_1_1_t;
 
+/*! \isp struct imv
+
+*/
+typedef struct
+{
+    /*!< enabled Enable/Disable sharpening*/
+    int32_t enabled;
+    /*!< minimum_edge_strength Minimum edge strength to apply sharpening (weaker edges below this value will not be sharpened). Lowering this will sharpen light textures but may also sharpen noise.*/
+    int32_t minimum_edge_strength;
+    /*!< maximum_edge_strength Maximum edge strength limit (pixels above this value will receive full sharpening).Lowering this applies full sharpening to weaker edges.*/
+    int32_t maximum_edge_strength;
+    /*!< strength Intensity of the sharpening effect (how much contrast is added to edges). Higher values result in stronger sharpening.*/
+    int32_t strength;
+    /*!< radius Size of the blur used to detect edges (larger = broader edges, smaller = narrow edge hallo). Range: [1 (3×3), 2 (5×5), 3 (7×7)]*/
+    int32_t radius;
+    /*!< h_clamp */
+    int32_t h_clamp;
+    /*!< l_clamp */
+    int32_t l_clamp;
+
+} ia_pal_isp_imv_t;
+
 /*! \isp struct input_system_drainer
 
 */
@@ -2113,6 +2147,46 @@ typedef struct
     int32_t drop_period;
 
 } ia_pal_isp_pext_1_0_t;
+
+/*! \isp struct remosaic_1_0
+4C sensor remosaicking algorithm for GPU
+*/
+typedef struct
+{
+    /*!< enable Enable for the filter*/
+    int32_t enable;
+    /*!< frame_width Frame width*/
+    int32_t frame_width;
+    /*!< frame_height Frame height*/
+    int32_t frame_height;
+    /*!< green_edge_sensitivity Weighting of green edges in G interpolation U1.8*/
+    int32_t green_edge_sensitivity;
+    /*!< color_edge_sensitivity Weighting of R/B color edge in G interpolation U1.8*/
+    int32_t color_edge_sensitivity;
+    /*!< long_edge_sensitivity Weighting of long G edges in G interpolation U1.8*/
+    int32_t long_edge_sensitivity;
+    /*!< blc_enable Enable input 4C black level subtraction*/
+    int32_t blc_enable;
+    /*!< wb_enable Enable input 4C white-balancing*/
+    int32_t wb_enable;
+    /*!< deblc_enable Enable output Bayer black level recovery*/
+    int32_t deblc_enable;
+    /*!< dewb_enable Enable output Bayer de-white-balancing*/
+    int32_t dewb_enable;
+    /*!< wb_factors[4] White balancing factors (R/B only) U4.12*/
+    int32_t wb_factors[4];
+    /*!< bl_offset Input black level correction*/
+    int32_t bl_offset;
+    /*!< desaturation_enable Enable desaturation algorithm*/
+    int32_t desaturation_enable;
+    /*!< desaturation_g_thr Saturated g pixel threshold U0.20*/
+    int32_t desaturation_g_thr;
+    /*!< desaturation_g_edge_thr Inverse green satured edge threshold U0.20*/
+    int32_t desaturation_g_edge_thr;
+    /*!< desaturation_slope Over-exposed pixel soft-threshold slope U8.8*/
+    int32_t desaturation_slope;
+
+} ia_pal_isp_remosaic_1_0_t;
 
 /*! \isp struct rgb_ir_2_0
 RGB-IR

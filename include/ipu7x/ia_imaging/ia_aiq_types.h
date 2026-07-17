@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2025 Intel Corporation
+ * Copyright 2012-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,6 +134,17 @@ typedef struct
     int manual_iso_min;                       /*!< Optional. Manual minimum ISO. -1 if NA. */
     int manual_iso_max;                       /*!< Optional. Manual maximum ISO. -1 if NA. */
 } ia_aiq_ae_manual_limits;
+
+/*!
+ *  \brief Manual gain values for each exposure in separate gain mode.
+ *  Valid when analog_gain >= 1.0 && digital_gain >= 1.0. isp_gain < 1.0 means not set (treated as 1.0).
+ */
+typedef struct
+{
+    float32_t analog_gain;   /*!< Manual analog gain. <1 means not set. */
+    float32_t digital_gain;  /*!< Manual digital gain. <1 means not set. */
+    float32_t isp_gain;      /*!< Manual ISP digital gain. <1 means not set (treated as 1.0). */
+} ia_aiq_ae_manual_separate_gain;
 
 /*!
  * \brief AEC exposure distribution priority modes
@@ -315,6 +326,7 @@ typedef struct
     unsigned int exposure_time_us;          /*!< Exposure time in microseconds, -1 if N/A. */
     float analog_gain;                      /*!< Deprecated. Analog gain as a multiplier (e.g. 1.0), -1.0 if N/A. */
     float digital_gain;                     /*!< Deprecated. Digital gain as a multiplier (e.g. 1.0), -1.0 if N/A. */
+    float isp_gain;                         /*!< Deprecated. ISP gain as a multiplier (e.g. 1.0), -1.0 if N/A. */
     float aperture_fn;                      /*!< f-number of aperture (e.g. 2.8), -1.0 for N/A. TODO: Move to ia_aiq_aperture_control structure. */
     unsigned int total_target_exposure;     /*!< Total exposure ie. combination of ET, gains, Aperture gain and ND gain, -1 if N/A. */
     bool nd_filter_enabled;                 /*!< true or false, false for N/A. */

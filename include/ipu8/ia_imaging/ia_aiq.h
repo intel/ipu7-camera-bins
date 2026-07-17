@@ -256,10 +256,13 @@ typedef struct
     long *manual_exposure_time_us;                                  /*!< Optional. Manual exposure time in microseconds. NULL if NA. Otherwise, array of values
                                                                          of num_exposures length. Order of exposure times corresponds to exposure_index of ae_results,
                                                                          e.g., manual_exposure_time_us[ae_results->exposures[0].exposure_index] = 33000; */
-    float32_t *manual_analog_gain;                                  /*!< Optional. Manual analog gain. NULL if NA. Otherwise, array of values of num_exposures length.
+    float32_t *manual_total_gain;                                   /*!< Optional. Manual total gain (legacy mode). NULL if NA. Otherwise, array of values of num_exposures length.
                                                                          Order of gain values corresponds to exposure_index of ae_results,
-                                                                         e.g., manual_analog_gain[ae_results->exposures[0].exposure_index] = 4.0f; */
-    int16_t *manual_iso;                                            /*!< Optional. Manual ISO. Overrides manual_analog_gain. NULL if NA. Otherwise, array of values
+                                                                         e.g., manual_total_gain[ae_results->exposures[0].exposure_index] = 4.0f; */
+    ia_aiq_ae_manual_separate_gain* manual_separate_gains;          /*!< Optional. Manual separate gains per exposure. NULL = legacy mode (manual_total_gain is used).
+                                                                         Non-NULL = separate mode, each gain stage set independently. Array of num_exposures length.
+                                                                         When set, overrides manual_total_gain. */
+    int16_t *manual_iso;                                            /*!< Optional. Manual ISO. Overrides manual_total_gain. NULL if NA. Otherwise, array of values
                                                                          of num_exposures length. Order of ISO values corresponds to exposure_index of ae_results,
                                                                          e.g., manual_iso[ae_results->exposures[0].exposure_index] = 100; */
     ia_aiq_ae_features *aec_features;                               /*!< Optional. AEC features in use when calculating new exposure parameters. */
