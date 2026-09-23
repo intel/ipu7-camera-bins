@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021-2025 Intel Corporation.
+ * Copyright (C) 2021-2026 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ const uint32_t MAX_CMC_LEN = 1024 * 1024;
 /**
  * @brief Maximum length of tag list.
  */
-const uint32_t MAX_TAG_LIST_LEN = 8;
+const uint32_t MAX_TAG_LIST_LEN = 30;
 
 /**
  * @brief Default frames per second.

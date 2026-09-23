@@ -33,24 +33,23 @@ extern "C" {
 typedef enum
 {
     ia_ccat_frame_type_nonflash,
+
 #ifdef IA_AEC_FEATURE_FLASH
     ia_ccat_frame_type_flash,
 #endif
+
     ia_ccat_frame_type_count
 } ia_ccat_frame_type;
 
 typedef enum
 {
     ia_ccat_histogram_type_cc_start = 0,
-    ia_ccat_histogram_type_cc_rgb_averaged = ia_ccat_histogram_type_cc_start, /*!< Color corrected and weighted R, G and B histograms averaged into one histogram. */
-    ia_ccat_histogram_type_cc_rgb_combined,                                   /*!< Color corrected and weighted R, G and B histograms summed into one histogram. */
+    ia_ccat_histogram_type_cc_rgb_combined = ia_ccat_histogram_type_cc_start, /*!< Color corrected and weighted R, G and B histograms summed into one histogram. */
     ia_ccat_histogram_type_cc_y,                                              /*!< Color corrected and weighted R, G and B histograms converted to Y (luminance) histogram. */
     ia_ccat_histogram_type_cc_end,
     ia_ccat_histogram_type_raw_start = ia_ccat_histogram_type_cc_end,
 #ifdef IA_CCAT_RGBS_GRID_ENABLED
-    ia_ccat_histogram_type_raw_rgb_averaged = ia_ccat_histogram_type_cc_end,  /*!< Raw (calculated from RGBS grid before color correction) R, G and B histograms averaged into one histogram. */
-    ia_ccat_histogram_type_raw_rgb_combined,                                  /*!< Raw (calculated from RGBS grid before color correction) R, G and B histograms summed into one histogram. */
-    ia_ccat_histogram_type_raw_y,                                             /*!< Raw (calculated from RGBS grid before color correction) R, G and B histograms converted to Y (luminance) histogram. */
+    ia_ccat_histogram_type_raw_y = ia_ccat_histogram_type_cc_end,             /*!< Raw (calculated from RGBS grid before color correction) R, G and B histograms converted to Y (luminance) histogram. */
     ia_ccat_histogram_type_uncorrected_raw_y,                                 /*!< Raw (calculated from RGBS grid before LSC and color correction) R, G and B histograms converted to Y (luminance) histogram. */
     ia_ccat_histogram_type_raw_end,
 #else
@@ -72,7 +71,7 @@ typedef struct
 } ia_ccat_histograms;
 
 #ifdef IA_CCAT_RGBS_GRID_ENABLED
-#ifdef IA_CCAT_HSV_GRID_ENABLED
+#ifdef IA_CCAT_HSV_GRID_ENABLED_OLD
 typedef struct
 {
     float h;
@@ -143,7 +142,7 @@ typedef struct
     ia_rectangle statistics_crop_area;                                          /*!< Mandatory. RGBS and AF grid area crop with respect to full field of view of sensor output using (relative)ranges from ia_coordinate.h. */
     float32_t stitched_stats_norm_factor;                                        /*!< Mandatory. For companded pipe usually statistivs represent more than 16bits then factor > 1 depends on highest bit represent by stat. */
     uint32_t rgbs_stats_bit_depth;                                               /*!< Mandatory. indicate the bit depth of rgbs stats */
-    int32_t cropped_image_height;                                               /*!< Mandatory. Cropped RGBS raw height */
+    int32_t cropped_image_height;                                                /*!< Mandatory. Width of the statistics area. */
 #ifdef IA_CCAT_EXTERNAL_RGB_HISTOGRAMS_ENABLED
     ia_ccat_histograms rgb_histograms[IA_CCAT_STATISTICS_MAX_NUM];              /*!< Optional. RGB histograms pointer for each exposure statistics. */
 #endif
@@ -185,6 +184,88 @@ typedef struct
 #endif
 } ia_ccat_frame_parameters;
 
+#ifdef IA_CCAT_FACE_ANALYSIS_ENABLED
+typedef enum {
+    IA_CCAT_FACE_MODE_FD,      /*!< Face rects from FD only, no segmap weighting. */
+    IA_CCAT_FACE_MODE_SAP,     /*!< Face rects and pixel mask derived from SAP segmap. */
+    IA_CCAT_FACE_MODE_FD_SAP,  /*!< Face rects from FD, pixel mask from SAP segmap. */
+} ia_ccat_face_mode_t;
+
+/*!
+ * \brief Per-frame face tracker events.
+ * Computed once per frame by analyze_face_events() and cached in frame_info_t.
+ * Read by any subsystem via ia_ccat_get_face_events().
+ */
+typedef struct
+{
+    bool    biggest_face_gone;     /*!< Face[0] was present last frame, absent this frame. */
+    bool    biggest_face_appeared; /*!< No face last frame, face[0] present this frame. */
+    bool    biggest_face_changed;  /*!< Face[0] shifted beyond the cell threshold for enough frames. */
+    bool    faces_merged;          /*!< Count fell and face[0] area grew — spots joined into one. */
+    bool    faces_split;           /*!< Count rose and face[0] area shrank — spot broke into two. */
+    uint8_t face_lost_mask;        /*!< Bit i: prev face i has no IoU match in current frame. */
+    uint8_t face_exited_mask;      /*!< Bit i: lost face i was last seen near the frame boundary. */
+    uint8_t face_turned_mask;      /*!< Bit i: lost face i had a small spot at last sighting (turned away). */
+} ia_ccat_face_events_t;
+
+/*!
+ * \brief Per-frame person tracker events.
+ * Superset of ia_ccat_face_events_t extended with SAP-based disappearance classification
+ * and continuous person-presence events.
+ *
+ * Disappearance mask bits use the *previous-frame* face index j.
+ * face_partially_covered_mask bits use the *current-frame* face index k.
+ */
+typedef struct
+{
+    /* --- Face-level events (same semantics as ia_ccat_face_events_t) ---------- */
+    bool    biggest_face_gone;
+    bool    biggest_face_appeared;
+    bool    biggest_face_changed;
+    bool    faces_merged;
+    bool    faces_split;
+    uint8_t face_lost_mask;
+    uint8_t face_exited_mask;
+    uint8_t face_turned_mask;
+    /* --- SAP-based disappearance classification (mutually exclusive per bit) -- */
+    uint8_t face_covered_by_hand_mask; /*!< Bit j: SKIN cells appeared in prev face j area — hand in front of face. */
+    uint8_t face_turned_away_mask;     /*!< Bit j: HAIR cells appeared in prev face j area — head rotated away. */
+    uint8_t person_hidden_mask;        /*!< Bit j: CLOTH moved into prev face j area — person ducked/slid down. */
+    uint8_t face_occluded_mask;        /*!< Bit j: CLOTH still below prev face j — object occlusion. */
+    uint8_t person_exited_frame_mask;  /*!< Bit j: face j exited AND cloth was also at frame edge. */
+    /* --- Continuous / independent events -------------------------------------- */
+    uint8_t face_partially_covered_mask; /*!< Bit k: current face k matched but SKIN cells overlap its bbox. */
+    bool    person_approaching;          /*!< Face[0]+cloth bounding area growing — person moving closer. */
+    bool    person_receding;             /*!< Face[0]+cloth bounding area shrinking — person moving away. */
+    bool    person_present_no_face;      /*!< No face detected but HAIR or CLOTH found in previous face region. */
+} ia_ccat_person_events_t;
+#endif
+
+#if defined(IA_CCAT_FACE_ANALYSIS_ENABLED) && defined(IA_CCAT_EXTERNAL_SEGMAP_ENABLED)
+/*!
+ * \brief Bounding box and cell count for one SAP segmap label class adjacent to a face.
+ * area is zero-initialised when cells == 0.
+ */
+typedef struct
+{
+    ia_rectangle area;  /*!< Bounding box in IA coordinates. */
+    uint32_t     cells; /*!< Number of segmap cells for this label assigned to this face. */
+} ia_ccat_label_region_t;
+
+/*!
+ * \brief Per-face person attribute regions derived from SAP segmap adjacent labels.
+ * One entry per face in resolved_faces[], filled by fill_resolved_person_attr_from_sap().
+ */
+typedef struct
+{
+    ia_ccat_label_region_t hair;        /*!< HAIR (7) cells — scalp hair above/around the face. */
+    ia_ccat_label_region_t facial_hair; /*!< FACIAL_HAIR (4) cells — beard/moustache on the face. */
+    ia_ccat_label_region_t skin;        /*!< SKIN (3) cells — neck and other exposed non-facial skin. */
+    ia_ccat_label_region_t cloth;       /*!< CLOTH (6) cells — shoulders and clothing below the face. */
+} ia_ccat_person_attr_t;
+#endif
+
+#ifdef IA_CCAT_EXTERNAL_SENSORS_ENABLED
 /*!
  * \brief Structure for various motion sensors
  * Accelerometer Events:
@@ -216,6 +297,7 @@ typedef struct
     float sensitivity;      /*!< Sensitivity of Ambient Light sensor */
     uint64_t fs;  /*!< Frame stamp in usec (microseconds) */
 } ia_ccat_ambient_light_event;
+#endif
 
 typedef struct ia_ccat_lse_size_t
 {
@@ -260,13 +342,13 @@ typedef enum
     ccat_project_adaption_bitmap_6 = 1 << 6,   /*!< is for wfov skin tone alignment */
     ccat_project_adaption_bitmap_7 = 1 << 7,   /*!< is CAF fine-search bitmap on - if on use CAF to perform fine search after PDAF */
     ccat_project_adaption_bitmap_8 = 1 << 8,   /*!< is to skip the logic that sets stable face signal when MSFT is updated. */
-    ccat_project_adaption_bitmap_9 = 1 << 9,   /*!< TBD */
+    ccat_project_adaption_bitmap_9 = 1 << 9,     /*!< TBD */
     ccat_project_adaption_bitmap_10 = 1 << 10,   /*!< TBD */
     ccat_project_adaption_bitmap_11 = 1 << 11,   /*!< is world facing camera */
-    ccat_project_adaption_bitmap_12 = 1 << 12,   /*!< TBD */
-    ccat_project_adaption_bitmap_13 = 1 << 13,   /*!< TBD */
+    ccat_project_adaption_bitmap_12 = 1 << 12,   /*!< face mode LSB: bits [13:12] select face mode (0=FD,1=SAP,2=FD_SAP) when segmap enabled */
+    ccat_project_adaption_bitmap_13 = 1 << 13,   /*!< face mode MSB: bits [13:12] select face mode (0=FD,1=SAP,2=FD_SAP) when segmap enabled */
     ccat_project_adaption_bitmap_14 = 1 << 14,   /*!< TBD */
-    ccat_project_adaption_bitmap_15 = 1 << 15   /*!< TBD */
+    ccat_project_adaption_bitmap_15 = 1 << 15    /*!< TBD */
 } ccat_project_adaption_bitmap_reg_t;
 
 #ifdef IA_CCAT_LIGHT_SOURCE_ESTIMATION_ENABLED
@@ -298,7 +380,7 @@ typedef struct
  * 3A code need to check the existence of STATS
  * feature, then all the below segments my appear
  * in the input segment map
-*/  
+*/
 typedef enum
 {
     BASIC = 0,
@@ -308,9 +390,9 @@ typedef enum
 } AlgoSapSuportedFeatures;
 
 /* available segments of STATS segment map to be used
- * for mapping between class_code from the segmap to 
+ * for mapping between class_code from the segmap to
  * Known segment from the below list
-*/  
+*/
 typedef enum
 {
     BACKGROUND = 0,
