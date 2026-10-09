@@ -137,6 +137,9 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
     ia_err GetPalInputData(uint32_t stream_id, int32_t seq_id, ia_binary_data *aic_output_common,
                            ia_binary_data *tuning_output, int32_t aicId = -1);
 
+
+    ia_err FindGaicFieldsOfRecordByUuid(uint32_t uuid, const aic::GaicRecord** records_out, uint32_t* record_count, int32_t aicId = -1);
+
     /*!
      * \brief Run AIC to get PAL binary for IPU7 HW.
      * Calculate the PAL parameters according to 3A+ results and manual settings.

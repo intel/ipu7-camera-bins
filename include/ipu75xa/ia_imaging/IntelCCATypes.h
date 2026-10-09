@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2025 Intel Corporation.
+ * Copyright (C) 2019-2026 Intel Corporation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -206,13 +206,15 @@ typedef struct {
     ia_coordinate exposure_coordinate; /*!< Coordinate for a point in which the exposure should be prioritized. */
     float32_t ev_shift; /*!< Exposure Value shift [-4,4]. */
     uint32_t manual_exposure_time_us[MAX_NUM_EXPOSURE]; /*!< Manual exposure time in microseconds. */
-    float32_t manual_analog_gain[MAX_NUM_EXPOSURE]; /*!< Manual analog gain. */
-    uint16_t manual_iso[MAX_NUM_EXPOSURE]; /*!< Manual ISO. Overrides manual_analog_gain. */
+    float32_t manual_total_gain[MAX_NUM_EXPOSURE]; /*!< Manual total gain (legacy mode). */
+    ia_aiq_ae_manual_separate_gain manual_separate_gains[MAX_NUM_EXPOSURE]; /*!< Manual separate gains. All zeros = not used (legacy mode). */
+    uint16_t manual_iso[MAX_NUM_EXPOSURE];       /*!< Manual ISO. Overrides manual_total_gain. */
     ia_aiq_ae_manual_limits manual_limits[MAX_NUM_EXPOSURE]; /*!< Manual limits which override limits defined in AEC tunings. */
     uint32_t manual_total_target_exposure[MAX_NUM_EXPOSURE]; /*!< Manual total target exposure. */
     ia_aiq_ae_exposure_distribution_priority exposure_distribution_priority; /*!< AEC exposure distribution priority mode. */
     float32_t manual_convergence_time; /*!< Manual AEC convergence speed in seconds. */
     bool is_bypass_result; /*!< Flag indicating if AE result needs to be saved to IntelCCA. */
+    ia_aiq_ae_viewport_roi viewport_roi; /*!< AE viewport quadrilateral. Zero-initialized if not provided. */
 } cca_ae_input_params;
 
 /*!
@@ -249,6 +251,8 @@ typedef struct {
     cca_hist_weight_grid weight_grid; /*!< AEC weight map used by the next frame. */
     ia_aiq_ae_flicker_reduction flicker_reduction_mode; /*!< Flicker reduction mode proposed by the AEC algorithm. */
     unsigned short shdr_ldr_mode; /*!< Staggered HDR LDR (low dynamic range) mode. 0 - HDR mode, 1 - LDR mode. */
+    unsigned short bnr_enabled;   /*!< 0 - BNR disabled, 1 - BNR enabled. */
+    unsigned short nr_mode;       /*!< (0) for AINR enhancer or (1) denoiser, for BNR currently not supported */
 } cca_ae_results;
 
 /*!
@@ -318,6 +322,7 @@ typedef struct {
     gtm_glare_detection_type glare_detect_type; /*!< Glare detection type. */
     uint32_t lux_level_sensors[2]; /*!< Sensor lux level based glare detection. */
     float32_t manual_gamma; /*!< Manual gamma for GTM. */
+    ia_nntm_global_weight_input_t nntm_global_weight_records; /*!< Optional. NNTM global weight GAIC + flags (passed through to GTM). */
 #ifdef _WIN32
     bool cphdr_mode; /*!< Flag indicating if adtm not run WDR in still cpHDR case */
 #endif
@@ -658,6 +663,7 @@ typedef struct {
     int32_t media_format_stills; /*!< Media format for stills. */
     tnr7us_trigger_info_t tnr7us_trigger_info; /*!< TNR7US trigger information. */
     seg_net_info_t seg_net_info; /*!< SEG net information. */
+    b2b_onnx_info_t b2b_onnx_info; /*!< B2B ONNX network metadata from CMC. */
 } cca_cmc;
 
 /*!

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2024 Intel Corporation
+ * Copyright 2012-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -293,8 +293,9 @@ typedef struct {
 
 typedef struct {
     ia_rectangle   face_area;                /**< Bounding box of the face in the coordination system where (0,0) indicates left-top position. */
-    int32_t        rip_angle;                /**< RIP (rotation in plane) angle in degrees. */
-    int32_t        rop_angle;                /**< ROP (rotation out of plane) angle in degrees. */
+    int32_t        rip_angle;                /**< RIP (rotation in plane) roll angle in degrees. */
+    int32_t        rop_angle;                /**< ROP (rotation out of plane) yaw angle in degrees. */
+    int32_t        pitch_angle;              /**< Pitch angle in degrees. */
     int32_t        tracking_id;              /**< Tracking id of the face. */
     int32_t        confidence;               /**< Confidence in face detection result. */
     int32_t        person_id;                /**< Person id (typically positive number) of the face. Filled after face recognition. -1 if not recognized. */
@@ -352,6 +353,21 @@ typedef enum
     gmv_match_out,
     NUM_STATISTICS_BUFFER_TYPES
 } ia_statistics_buffer_type;
+
+/*!
+ * \brief Raw GAIC 1D record (gain breakpoints + values) for one PAL field (e.g. NNTM global_weight).
+ *
+ * \c gain_value_array points to table values; \c parameter_type is the GAIC record header value
+ * (\c gaic_parameter_type in generic_aic_common), kept for logging or callers that need the raw type id.
+ */
+typedef struct ia_gaic_record
+{
+    const float32_t* gain_point_array; /*!< Gain point values (e.g. 1, 4, 8, and so on) */
+    uint8_t gain_point_count;          /*!< Number of gain points. */
+    const int16_t* gain_value_array;   /*!< Packed table; element width from parameter_type. */
+    uint32_t gain_value_count;         /*!< Number of gain values. */
+    uint8_t parameter_type;            /*!< Packed CPF element type (gaic_parameter_type). */
+} ia_gaic_record_t;
 
 #ifdef __cplusplus
 }
