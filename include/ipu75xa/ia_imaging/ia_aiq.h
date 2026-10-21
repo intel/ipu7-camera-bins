@@ -158,6 +158,7 @@
 
 #include "ia_aiq_types_v1.h"
 #include "ia_types.h"
+#include "ia_nntm_types.h"
 #include "ia_mkn_types.h"
 #include "ia_cmc_types.h"
 #include "ia_statistics_types.h"
@@ -256,10 +257,13 @@ typedef struct
     long *manual_exposure_time_us;                                  /*!< Optional. Manual exposure time in microseconds. NULL if NA. Otherwise, array of values
                                                                          of num_exposures length. Order of exposure times corresponds to exposure_index of ae_results,
                                                                          e.g., manual_exposure_time_us[ae_results->exposures[0].exposure_index] = 33000; */
-    float32_t *manual_analog_gain;                                  /*!< Optional. Manual analog gain. NULL if NA. Otherwise, array of values of num_exposures length.
+    float32_t* manual_total_gain;                                   /*!< Optional. Manual total gain (legacy mode). NULL if NA. Otherwise, array of values of num_exposures length.
                                                                          Order of gain values corresponds to exposure_index of ae_results,
-                                                                         e.g., manual_analog_gain[ae_results->exposures[0].exposure_index] = 4.0f; */
-    int16_t *manual_iso;                                            /*!< Optional. Manual ISO. Overrides manual_analog_gain. NULL if NA. Otherwise, array of values
+                                                                         e.g., manual_total_gain[ae_results->exposures[0].exposure_index] = 4.0f; */
+    ia_aiq_ae_manual_separate_gain* manual_separate_gains;          /*!< Optional. Manual separate gains per exposure. NULL = legacy mode (manual_total_gain is used).
+                                                                         Non-NULL = separate mode, each gain stage set independently. Array of num_exposures length.
+                                                                         When set, overrides manual_total_gain. */
+    int16_t *manual_iso;                                            /*!< Optional. Manual ISO. Overrides manual_total_gain. NULL if NA. Otherwise, array of values
                                                                          of num_exposures length. Order of ISO values corresponds to exposure_index of ae_results,
                                                                          e.g., manual_iso[ae_results->exposures[0].exposure_index] = 100; */
     ia_aiq_ae_features *aec_features;                               /*!< Optional. AEC features in use when calculating new exposure parameters. */
@@ -272,6 +276,7 @@ typedef struct
                                                                          -1.0 if NA (uses tunings).
                                                                          0.0  means convergence filters are bypassed, this is similar behavior as in previous API when using frame_use still
                                                                          > 0.0  Overrides convergence speed from tunings. */
+    const ia_aiq_ae_viewport_roi *viewport_roi;                     /*!< Optional. AE viewport quadrilateral. NULL if not provided. */
 } ia_aiq_ae_input_params_v1;
 
 /*!
@@ -442,6 +447,7 @@ typedef struct
     bool athena_mode;                       /*!< Optional. This flag is used to indicate whethe athena mode is enabled in ful_gtm algo*/
     gtm_glare_detection_type glare_detect_type; /*!< Optional. Glare detection. */
     uint32_t lux_level_sensors[2];              /*!< Optional. Sensor lux level based glare detection. */
+    ia_nntm_global_weight_input_t nntm_global_weight_records; /*!< Optional. NNTM global weight GAIC + flags (passed through to GTM init_parameters). */
 #ifdef _WIN32
     bool cphdr_mode;
 #endif
@@ -585,8 +591,8 @@ ia_aiq_af_bracket(ia_aiq *a_ia_aiq_ptr,
 LIBEXPORT ia_err
 ia_aiq_get_cct_whitemap_node(ia_aiq* a_ia_aiq_ptr,
     uint32_t cur_cct,
-    float32_t *r_g_gain,
-    float32_t *b_g_gain);
+    float32_t* r_g_gain,
+    float32_t* b_g_gain);
 
 /*!
  * \param[in]  ia_aiq               Mandatory.\n
@@ -621,6 +627,7 @@ ia_aiq_statistics_set_v5(
     const ia_ccat_frame_statistics *frame_statistics,               /*!< \param[in] Input statistics */
     const ia_ccat_frame_parameters *frame_parameters);              /*!< \param[in] Input parameters */
 
+#ifdef IA_CCAT_EXTERNAL_SENSORS_ENABLED
 /*!
 * \brief Data from external sensors
 */
@@ -650,6 +657,9 @@ typedef struct
 LIBEXPORT ia_err
 ia_aiq_sensor_events_set_v2(ia_aiq *a_ia_aiq_ptr,
                             const ia_aiq_sensor_events_v2 *sensor_events_input);
+
+
+#endif
 /*!
  * \brief Segment downscaling and align with RGBS grids.
  * Some of the AIQ algorithms benefit from segment map which tells about content in image

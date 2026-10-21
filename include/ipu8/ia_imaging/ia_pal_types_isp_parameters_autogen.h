@@ -192,11 +192,25 @@ typedef struct
 
 } ia_pal_isp_aestatistics_2_1_t;
 
+/*! \isp struct ainr
+
+*/
+typedef struct
+{
+    /*!< width width*/
+    int32_t width;
+    /*!< height height*/
+    int32_t height;
+
+} ia_pal_isp_ainr_t;
+
 /*! \isp struct b2b
 
 */
 typedef struct
 {
+    /*!< bypass Block bypass*/
+    int32_t bypass;
     /*!< cvt_k CVT_K for Bayer to Bayer. Original Value is a float multiplied by 2^22*/
     int32_t cvt_k;
     /*!< cvt_b CVT_B for Bayer to Bayer. Original Value is a float multiplied by 2^22*/
@@ -2045,6 +2059,12 @@ typedef struct
     int32_t luma_threshold_min;
     /*!< luma_threshold_max luma max range for chroma save*/
     int32_t luma_threshold_max;
+    /*!< protect_chroma_decrease_enable chroma decrease protection  enable*/
+    int32_t protect_chroma_decrease_enable;
+    /*!< chroma_threshold chroma threshold to protect*/
+    int32_t chroma_threshold;
+    /*!< chroma_strength steps of influence*/
+    int32_t chroma_strength;
     /*!< gtm_a polynomial chromaticity model degree*/
     int32_t gtm_a;
     /*!< gtm_b color saturation in highlights*/
@@ -3740,6 +3760,8 @@ typedef struct
 {
     /*!< dol_processing 0 - regular processing. 1 - dol processing*/
     uint8_t dol_processing;
+    /*!< is_4_cell 0 - regular sensor, 1 - 4 cell sensor*/
+    uint8_t is_4_cell;
 
 } ia_pal_system_api_bxt_blc_t;
 

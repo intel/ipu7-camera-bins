@@ -212,7 +212,9 @@ typedef enum
     cmc_name_id_media_format,    //preview/video         /*!< 37 */
     cmc_name_id_cbd,                                     /*!< 38 */
     cmc_name_id_media_format_stills,                     /*!< 39 */
-    cmc_name_id_seg_net                                  /*!< 40 */
+    cmc_name_id_seg_net,                                 /*!< 40 */
+    cmc_name_id_b2b_noise_model,                         /*!< 41 */
+    cmc_name_id_b2b_onnx                                 /*!< 42 */
 } cmc_name_id;
 
 /*!
@@ -1570,6 +1572,8 @@ typedef struct
 #define SEG_NET_VERSION_SIZE   3U
 #define SEG_NET_CRC_CODE_SIZE   128U
 #define SEG_NET_MAX_SEGMENTS   16U
+#define CTC_NET_VERSION_SIZE   3U
+#define CTC_NET_CRC_CODE_SIZE   128U
 
 typedef struct
 {
@@ -1581,10 +1585,30 @@ typedef struct
     uint8_t seg_net_num_of_features;
     uint8_t *seg_net_features;
     uint8_t enable_statistics_output;
-
-
+    uint16_t ctc_net_file_version[CTC_NET_VERSION_SIZE];
+    uint8_t ctc_net_checksum[CTC_NET_CRC_CODE_SIZE];
 } seg_net_info_t;
 
+#define B2B_NOISE_MODEL_B_COEFF_COUNT 3U
+#define B2B_NOISE_MODEL_K_COEFF_COUNT 2U
+#define B2B_ONNX_VERSION_SIZE 3U
+#define B2B_ONNX_CHECKSUM_SIZE 128U
+
+typedef struct
+{
+    ia_mkn_record_header header;    /*!< Record header with Format ID: Float (See AIQB_DataID) Name ID: cmc_name_id_b2b_noise_model (See cmc_name_id). */
+    float b_coeff[B2B_NOISE_MODEL_B_COEFF_COUNT];
+    float k_coeff[B2B_NOISE_MODEL_K_COEFF_COUNT];
+} b2b_noise_model_t;
+
+typedef struct
+{
+    ia_mkn_record_header header;    /*!< Record header with Format ID: UInt16 (See AIQB_DataID) Name ID: cmc_name_id_b2b_onnx (See cmc_name_id). CPFF record version 100. */
+    uint16_t enhanced_mode_onnx_file_version[B2B_ONNX_VERSION_SIZE];       /*!< Enhanced mode B2B ONNX; intended for lower gains. */
+    uint8_t enhanced_mode_onnx_file_checksum[B2B_ONNX_CHECKSUM_SIZE];
+    uint16_t noise_reduction_onnx_file_version[B2B_ONNX_VERSION_SIZE];     /*!< Noise reduction B2B ONNX; intended for higher gains. */
+    uint8_t noise_reduction_onnx_file_checksum[B2B_ONNX_CHECKSUM_SIZE];
+} b2b_onnx_info_t;
 
 /*!
  * \brief Parsed CMC structure.
@@ -1631,6 +1655,8 @@ typedef struct
     cmc_parsed_cbd_t *cmc_parsed_cbd;
     tnr7us_trigger_info_t *tnr7us_trigger_info;
     seg_net_info_t* seg_net_info_t;
+    b2b_noise_model_t* b2b_noise_model;
+    b2b_onnx_info_t* b2b_onnx_info;
     const ia_binary_data *a_aiqb_binary;
 } ia_cmc_t;
 
