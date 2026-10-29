@@ -22,11 +22,16 @@
 #define IA_AIC_CLASS_H
 
 #include "ia_aic_types.h"
+#include "ia_types.h"
+#include "ia_nntm_types.h"
 #if defined INPUTS_IN_FILE
 #include "ia_aic_class_file_debug.h"
 #endif
 
 namespace aic {
+typedef ia_gaic_record_t GaicRecord;
+struct GaicRecordBuffer;
+
 class LIBEXPORT IaAic
 {
   public:
@@ -103,6 +108,7 @@ class LIBEXPORT IaAic
         uint32_t fragment_index = 0U);
 
     ia_err GetPalInputParameters(int64_t sequenceId, ia_binary_data* aic_output_common, ia_binary_data* tuning_output);
+    ia_err FindGaicFieldsOfRecordByUuid(uint32_t uuid, const GaicRecord** records_out, uint32_t* record_count) const;
 
     /*! Register kernel offsets for a kernel with uuid in CB/PG group_id and terminal
      *
@@ -270,6 +276,7 @@ class LIBEXPORT IaAic
 
     void IaAicDeinitPrivate();
     ia_err IaAicUpdateGAic(const ia_binary_data *aiqb_data);
+    void ClearGaicRecordBuf() const;
 
     ia_err RunAicPrivate(const IaAicInputParams *inputParams);
     size_t MapConversionBuffers(void *buffer);
@@ -279,6 +286,9 @@ class LIBEXPORT IaAic
 #endif
     /* Pipe level AIC */
     ia_aic_handle *mAic;
+
+    /* AIC-owned GAIC record views returned by FindGaicFieldsOfRecordByUuid(). */
+    mutable GaicRecordBuffer* mGaicRecordBuf;
 
     /* Max number of CBs / program groups which one context can handle */
     static const int32_t AIC_MAX_PGS = 5;

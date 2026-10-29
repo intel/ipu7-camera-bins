@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2025 Intel Corporation
+ * Copyright 2012-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,6 +134,44 @@ typedef struct
     int manual_iso_min;                       /*!< Optional. Manual minimum ISO. -1 if NA. */
     int manual_iso_max;                       /*!< Optional. Manual maximum ISO. -1 if NA. */
 } ia_aiq_ae_manual_limits;
+
+/*!
+ *  \brief Manual gain values for each exposure in separate gain mode.
+ *  Valid when analog_gain >= 1.0 && digital_gain >= 1.0. isp_gain < 1.0 means not set (treated as 1.0).
+ */
+typedef struct
+{
+    float32_t analog_gain;   /*!< Manual analog gain. <1 means not set. */
+    float32_t digital_gain;  /*!< Manual digital gain. <1 means not set. */
+    float32_t isp_gain;      /*!< Manual ISP digital gain. <1 means not set (treated as 1.0). */
+} ia_aiq_ae_manual_separate_gain;
+
+/*!
+ * \brief Number of corners defining a viewport quadrilateral.
+ */
+#define IA_AIQ_VIEWPORT_NUM_CORNERS 4
+
+/*!
+ * \brief Metadata flags carried with an AE viewport ROI.
+ */
+typedef enum
+{
+    ia_aiq_ae_viewport_roi_flag_none   = 0U,        /*!< No metadata flag is set. */
+    ia_aiq_ae_viewport_roi_flag_update = (1U << 0U) /*!< Indicates a viewport ROI update. */
+} ia_aiq_ae_viewport_roi_flag;
+
+/*!
+ * \brief AE viewport ROI expressed as four corner coordinates.
+ *
+ * Corners are stored in the following order: top-left, top-right,
+ * bottom-right and bottom-left.
+ * Undefined bits in ae_viewport_roi_flags must be set to zero.
+ */
+typedef struct
+{
+    ia_coordinate corners[IA_AIQ_VIEWPORT_NUM_CORNERS];
+    uint32_t flags;
+} ia_aiq_ae_viewport_roi;
 
 /*!
  * \brief AEC exposure distribution priority modes
@@ -279,11 +317,12 @@ typedef enum
 typedef enum
 {
     ia_aiq_bracket_mode_none,             /*!< No bracketing used. */
-    ia_aiq_bracket_mode_ull  = (1U << 0U),  /*!< Ultra Low Light bracketing used. */
-    ia_aiq_bracket_mode_hdr  = (1U << 1U),   /*!< High Dynamic Range bracketing used. */
-    ia_aiq_bracket_mode_ull_auto_switch = (1U << 2U),   /*!< 1C (0) 4C (1) auto switch indication. */
-    ia_aiq_bracket_mode_shdr_ldr_switch = (1U << 3U),    /*!< shdr S and L (0) ldr long only (1) - for DOL */
-    ia_aiq_bracket_mode_vai_mode = (1U << 4U) /*!< Video AI mode enable (0) regular mode (1) currently BNR, used to be VAI*/
+    ia_aiq_bracket_mode_ull = (1U << 0U),  /*!< Ultra Low Light bracketing used. */
+    ia_aiq_bracket_mode_hdr = (1U << 1U),  /*!< High Dynamic Range bracketing used. */
+    ia_aiq_bracket_mode_ull_auto_switch = (1U << 2U),  /*!< 1C (0) 4C (1) auto switch indication. */
+    ia_aiq_bracket_mode_shdr_ldr_switch = (1U << 3U),  /*!< shdr S and L (0) ldr long only (1) - for DOL */
+    ia_aiq_bracket_mode_vai_mode = (1U << 4U),  /*!< Video AI mode enable (0) regular mode (1) currently BNR and AINR, used to be VAI*/
+    ia_aiq_bracket_mode_nr_mode_switch = (1U << 5U)  /*!< Valid only when ia_aiq_bracket_mode_vai_mode is set to 1. (0) AINR enhancer mode, (1) AINR noise reduction mode. BNR currently not supported.*/
 } ia_aiq_bracket_mode;
 
 /*!
@@ -315,6 +354,7 @@ typedef struct
     unsigned int exposure_time_us;          /*!< Exposure time in microseconds, -1 if N/A. */
     float analog_gain;                      /*!< Deprecated. Analog gain as a multiplier (e.g. 1.0), -1.0 if N/A. */
     float digital_gain;                     /*!< Deprecated. Digital gain as a multiplier (e.g. 1.0), -1.0 if N/A. */
+    float isp_gain;                         /*!< Deprecated. ISP gain as a multiplier (e.g. 1.0), -1.0 if N/A. */
     float aperture_fn;                      /*!< f-number of aperture (e.g. 2.8), -1.0 for N/A. TODO: Move to ia_aiq_aperture_control structure. */
     unsigned int total_target_exposure;     /*!< Total exposure ie. combination of ET, gains, Aperture gain and ND gain, -1 if N/A. */
     bool nd_filter_enabled;                 /*!< true or false, false for N/A. */
@@ -1050,5 +1090,3 @@ typedef struct {
 #endif
 
 #endif /* IA_AIQ_TYPES_H_ */
-
-
