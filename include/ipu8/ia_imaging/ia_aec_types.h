@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Intel Corporation
+ * Copyright 2018-2026 Intel Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,9 +73,6 @@ typedef struct
 #endif
 #ifdef IA_AEC_FEATURE_ROI_ENABLED
     ia_rectangle exposure_window;                                                   /*!< Rectangle of area which AEC uses to to calculate new exposure parameters. If rectangle is not to be used, all values must be set to 0. */
-#endif
-#ifdef IA_AEC_FEATURE_APERTURE_CONTROL
-    float manual_aperture_fn;                                                       /*!< Manual f-number of aperture (e.g. 2.8), <= 0.0 for N/A. Used only with P iris. */
 #endif
 #ifdef IA_AEC_FEATURE_DC_IRIS
     ia_aiq_aperture_control_dc_iris_command manual_dc_iris_command;                 /*!< Used only with DC iris. 0 (auto) for N/A. */

@@ -91,8 +91,9 @@ typedef struct
     bool           eye_validity;              /*!< Indicates whether a face was processed to get eye positions */
     float          skin_type_dark_likelihood; /*!< Likelihood of skin type being dark. Bright skin likelihood = 100 - dark_skin_type_likelihood */
     bool           skin_type_validity;        /*!< Validity of the Skin Likelihood */
-    int32_t        rip_angle;                /**< RIP (rotation in plane) angle in degrees. */
-    int32_t        rop_angle;                /**< ROP (rotation out of plane) angle in degrees. */
+    int32_t        rip_angle;                /**< RIP (rotation in plane) roll angle in degrees. */
+    int32_t        rop_angle;                /**< ROP (rotation out of plane) yaw angle in degrees. */
+    int32_t        pitch_angle;              /**< Pitch angle in degrees. */
 } ia_face_roi;
 
 typedef struct
