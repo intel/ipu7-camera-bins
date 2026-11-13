@@ -174,6 +174,10 @@ class LIBEXPORT IaAic
      *  mForceStreamConst on every PacEngine. */
     ia_err updateGAicTuning(const ia_binary_data *aiqb_data);
 
+    /*! Reset persistent PAL S&R state for every configured PG.
+     *  The next PAL calculation reinitializes the S&R parameters. */
+    ia_err resetSaveAndRestore();
+
     /*! Update resolutions info/history configuration for CB/PG to AIC context
      *
      *

@@ -109,12 +109,12 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      * \param[in] frameId Indicate PAL results for a specific frame.
      * \param[in] params Manual settings for IPU pipeline.
      * \param[out] output Binary array of IPU parameters for each CB.
-     * \param[in] bitmap Bitmap to decide which CB will be run. Default is UINT8_MAX.
+     * \param[in] bitmap Bitmap to decide which CB will be run. Default is UINT32_MAX.
      * \param[in] aicId (Optional) The ID for AIC handle. Default is -1.
      * \return Error code for status. Zero on success, non-zero on failure.
      */
     ia_err runAIC(uint64_t frameId, const cca_pal_input_params &params,
-                  cca_multi_pal_output &output, uint8_t bitmap = UINT8_MAX, int32_t aicId = -1);
+                  cca_multi_pal_output &output, uint32_t bitmap = UINT32_MAX, int32_t aicId = -1);
 
     /*!
      * \brief Set input information about the segmap.
@@ -193,6 +193,18 @@ class LIBEXPORT IntelCCA : public IntelCCABase {
      */
     cca_frame_stats *queryStatsBuf(cca_stats_buf_status status,
                                    uint64_t frameId = cca::INVALID_FRAME_ID);
+
+    /*!
+     * \brief Reset persistent PAL S&R state for the selected AIC handle.
+     *
+     * Call at a frame boundary after prior fragments and in-flight statistics
+     * have completed or been abandoned. The next PAL calculation reinitializes
+     * the S&R parameters.
+     *
+     * \param[in] aicId (Optional) AIC handle stream id. Default is -1.
+     * \return Error code for status. Zero on success, non-zero on failure.
+     */
+    ia_err resetSaveAndRestore(int32_t aicId = -1);
 
  private:
     /*!
