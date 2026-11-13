@@ -347,7 +347,7 @@ typedef enum
     ccat_project_adaption_bitmap_11 = 1 << 11,   /*!< is world facing camera */
     ccat_project_adaption_bitmap_12 = 1 << 12,   /*!< face mode LSB: bits [13:12] select face mode (0=FD,1=SAP,2=FD_SAP) when segmap enabled */
     ccat_project_adaption_bitmap_13 = 1 << 13,   /*!< face mode MSB: bits [13:12] select face mode (0=FD,1=SAP,2=FD_SAP) when segmap enabled */
-    ccat_project_adaption_bitmap_14 = 1 << 14,   /*!< TBD */
+    ccat_project_adaption_bitmap_14 = 1 << 14,   /*!< LSE discard RGBS low values - if on discard values lower then specifc G for LSE */
     ccat_project_adaption_bitmap_15 = 1 << 15    /*!< TBD */
 } ccat_project_adaption_bitmap_reg_t;
 
