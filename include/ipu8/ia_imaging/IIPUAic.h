@@ -282,6 +282,18 @@ public:
     ia_err updateGAicTuning(const ia_binary_data *aiqb, int32_t streamId = -1);
 
     /*!
+     * \brief Reset persistent PAL S&R state for the selected AIC handle.
+     *
+     * Call at a frame boundary after prior fragments and in-flight statistics
+     * have completed or been abandoned. The next PAL calculation reinitializes
+     * the S&R parameters.
+     *
+     * \param[in] aicId (Optional) AIC handle stream id. Default is -1.
+     * \return Error code.
+     */
+    ia_err resetSaveAndRestore(int32_t aicId = -1);
+
+    /*!
      * \brief Get statistics parameters for a specific frame.
      *
      * \param[in] frame_id Frame ID for statistics.
@@ -320,7 +332,7 @@ public:
      * \return Error code.
      */
     ia_err run(const cca_pal_input_params& params, cca_3a_plus_results& aaaResults,
-               cca_multi_pal_output& output, uint8_t bitmap, int32_t aicId = -1);
+               cca_multi_pal_output& output, uint32_t bitmap, int32_t aicId = -1);
 
     /*!
      * \brief Run AIC parameters with graph config and Intel 3A results.
